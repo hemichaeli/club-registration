@@ -36,7 +36,7 @@
 <div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרה והסכמה</h2></div><p class="sub">נא לאשר את הסעיפים הבאים</p>
 
 <h3 class="subsec-title">הצהרת בריאות</h3>
-<label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי תקין וכי אעדכן את המאמן/ת בכל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי מאפשר לי פעילות גופנית, ואעדכן את המאמנ/ת על כל שינוי</span></label>
+<label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי מאפשר לי פעילות גופנית ולקחת חלק באימונים מסוג אומנות לחימה הכוללים מגע, ואעדכן את המאמנ/ת על כל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי מאפשר לי פעילות גופנית ולקחת חלק באימונים מסוג אומנות לחימה הכוללים מגע, ואעדכן את המאמנ/ת על כל שינוי</span></label>
 
 <h3 class="subsec-title">הסכמה לתנאי הפעילות</h3>
 <div class="consent-info">אני מבינ/ה שהאימונים כוללים:<br>• מגע פיזי עם מאמנים ומתאמנים<br>• סיכון סביר לפציעות, כמו בכל פעילות ספורט<br>• במקרה פציעה: עזרה ראשונה ופינוי רפואי אם יידרש, על חשבוני<br>• השתתפות אפשרית בספארים/קרבות מבוקרים, אם וכאשר יתקיימו</div>
@@ -48,7 +48,7 @@
 <input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="אני מתחייב/ת לציית לכללי הבטיחות ולהוראות המאמנים בכל עת" hidden>
 
 <h3 class="subsec-title">מדיניות ביטול</h3>
-<div class="consent-info">כדי שנוכל לתכנן את המערכת, חשוב לנו לדעת מראש:<br>★ הודעה <strong>עד ה-15 לחודש</strong> — החיוב עוצר בסוף החודש<br>★ הודעה <strong>אחרי ה-15</strong> — יחויב גם החודש הבא<br>★ ניתן להודיע בוואטסאפ או באימייל בכל עת</div>
+<div class="consent-info">כדי שנוכל לתכנן את המערכת, חשוב לנו לדעת מראש:<br>★ הודעה <strong>עד ה-15 לחודש</strong> — החיוב עוצר בסוף החודש<br>★ הודעה <strong>אחרי ה-15 לחודש</strong> — יחויב גם החודש הבא<br>★ ניתן להודיע בהודעה מסודרת בוואטסאפ בכל עת</div>
 <label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת את מדיניות הביטול: הודעה על הפסקת חברות במועדון שתינתן לאחר ה-15 לחודש תחייב תשלום עבור החודש הבא. הודעה שתינתן עד ה-15 לחודש תעצור את החיוב בסוף אותו חודש." required><span class="box"></span><span class="txt">הבנתי את מדיניות הביטול</span></label>
 
 </div>
@@ -215,13 +215,14 @@ function loadPackages() {
     .then(function(data) { renderPackages(data.packages || []); })
     .catch(function(err) {
       renderPackages([
-        { name: 'שיעור ניסיון', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
+        { name: 'שיעור ניסיון בקבוצה', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון אישי 1:1', price: '350', period: 'חד פעמי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים - מנוי', price: '1200', period: 'חודשי', paymentType: 'recurring' },
-        { name: 'חבילת 8 אימונים - מנוי', price: '2200', period: 'חודשי', paymentType: 'recurring' },
-        { name: 'קבוצת נשים - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' },
-        { name: 'קבוצת גברים - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' },
-        { name: 'קבוצת בנות - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' }
+        { name: 'חבילת 4 אימונים פרטיים/אישיים - מנוי חודשי', price: '1200', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'חבילת 8 אימונים פרטיים/אישיים - מנוי חודשי', price: '2400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת נשים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת גברים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנות - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' }
       ]);
     });
 }
