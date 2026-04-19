@@ -24,13 +24,13 @@
 <form class="form-wrap" id="mainForm">
 
 <!-- 0: פרטים אישיים -->
-<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div><div class="field"><label class="flabel"><span class="req">*</span> תעודת זהות <span style="color:var(--muted);font-weight:400;font-size:12px">(לצורך הפקת חשבונית מס-קבלה)</span></label><input type="text" name="entry.842454738" placeholder="מספר ת.ז." required inputmode="numeric"></div></div>
+<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div><div class="field"><label class="flabel">תעודת זהות <span style="color:var(--muted);font-weight:400;font-size:12px">(לא חובה · נחוץ רק להפקת חשבונית מס-קבלה)</span></label><input type="text" name="entry.842454738" placeholder="מספר ת.ז." inputmode="numeric"></div></div>
 
 <!-- 1: הניסיון והבריאות שלך -->
 <div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F94A;</div><h2>הניסיון והבריאות שלך</h2></div><p class="sub">נכיר אותך קצת ונוודא שהאימונים בטוחים</p><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי"><span class="dot"></span> אולי</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן" data-show="medsDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים" data-show="medsDetail"><span class="dot"></span> לעיתים</label></div><div class="conditional" id="medsDetail"><label class="flabel">פרט/י</label><textarea name="entry.1215413202" placeholder="שם התרופה ומינון..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן" data-show="mobilityDetail"><span class="dot"></span> כן</label></div><div class="conditional" id="mobilityDetail"><label class="flabel">פרט/י</label><textarea name="entry.1447318397" placeholder="תאר/י את המגבלות..."></textarea></div></div></div>
 
 <!-- 2: איש קשר נוסף -->
-<div class="section" data-sec="2"><div class="section-header"><div class="section-icon blue">&#x1F465;</div><h2>איש קשר נוסף</h2></div><p class="sub">למקרה של עדכון</p><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> שם מלא</label><input type="text" name="entry.1762689145" placeholder="שם מלא" required></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.1630881508" placeholder="050-0000000" required></div></div></div>
+<div class="section" data-sec="2"><div class="section-header"><div class="section-icon blue">&#x1F465;</div><h2>איש קשר נוסף</h2></div><p class="sub">למקרה של עדכון (לא חובה)</p><div class="row"><div class="field"><label class="flabel">שם מלא</label><input type="text" name="entry.1762689145" placeholder="שם מלא"></div><div class="field"><label class="flabel">מספר טלפון</label><input type="tel" name="entry.1630881508" placeholder="050-0000000"></div></div></div>
 
 <!-- 3: הצהרה והסכמה -->
 <div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרה והסכמה</h2></div><p class="sub">נא לאשר את הסעיפים הבאים</p>
@@ -66,48 +66,23 @@
   </div>
 </div>
 
-<!-- Payment: one-time packages -->
-<div class="section pay-section" data-sec="5" id="payOnetime">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="pkg-summary"><span class="ps-name" id="pkgSummaryOnetimeName">—</span><span class="ps-price" id="pkgSummaryOnetimePrice">—</span></div>
-<div class="field"><div class="radio-group" id="radioOnetime">
-<label class="radio-option"><input type="radio" name="entry.324474069" value="כרטיס אשראי – תשלום חד פעמי"><span class="dot"></span> כרטיס אשראי - חד פעמי</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="פייבוקס - PayBox"><span class="dot"></span> PayBox</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="ביט - Bit"><span class="dot"></span> Bit - ביט</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="מזומן"><span class="dot"></span> מזומן</label>
-</div></div>
-<div class="pay-info-box">
+<!-- Payment: unified (auto-determined by package type) -->
+<div class="section pay-section" data-sec="5" id="payUnified">
+<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>סיכום ותשלום</h2></div><p class="sub">אופן התשלום נקבע לפי החבילה שבחרת</p>
+<div class="pkg-summary"><span class="ps-name" id="pkgSummaryName">—</span><span class="ps-price" id="pkgSummaryPrice">—</span></div>
+<div class="pay-info-box" style="background:rgba(212,168,83,.06);border-color:rgba(212,168,83,.25);margin-top:10px">
+  <div class="pi-title" id="payTypeTitle" style="color:var(--gold);font-size:14px">—</div>
+  <div class="pi-sub" id="payTypeSub">—</div>
+</div>
+<div class="pay-info-box" style="margin-top:10px">
   <div class="pi-title">📱 מה קורה אחרי שליחת הטופס?</div>
-  <div class="pi-sub">תקבל/י הודעת וואטסאפ מספיר עם פרטי התשלום תוך כמה דקות.</div>
+  <div class="pi-sub">תקבל/י הודעת וואטסאפ מספיר עם קישור לתשלום מאובטח ב-iCount, שם תוכל/י לבחור: אשראי / Bit / PayBox / הוראת קבע.</div>
 </div>
+<!-- Hidden inputs preserve Google Form payment-method entry values (auto-filled by JS) -->
+<input type="hidden" name="entry.324474069" id="hidOnetime" value="">
+<input type="hidden" name="entry.646554335" id="hidMonthly" value="">
+<input type="hidden" name="entry.1663473485" id="hidSub" value="">
 </div>
-
-<!-- Payment: monthly + group packages -->
-<div class="section pay-section" data-sec="5" id="payMonthly">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="pkg-summary"><span class="ps-name" id="pkgSummaryMonthlyName">—</span><span class="ps-price" id="pkgSummaryMonthlyPrice">—</span></div>
-<div class="field"><div class="radio-group" id="radioMonthly">
-<label class="radio-option"><input type="radio" name="entry.646554335" value="כרטיס אשראי — תשלום חד פעמי"><span class="dot"></span> כרטיס אשראי - חד פעמי</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="הוראת קבע בכרטיס אשראי — חיוב חודשי אוטומטי"><span class="dot"></span> הוראת קבע באשראי - חודשי</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="פייבוקס - PayBox"><span class="dot"></span> PayBox</label>
-<label class="radio-option" id="bitOption"><input type="radio" name="entry.646554335" value="ביט - Bit"><span class="dot"></span> Bit - ביט</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="העברה בנקאית"><span class="dot"></span> העברה בנקאית</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="מזומן"><span class="dot"></span> מזומן</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="הוראת קבע בנקאית"><span class="dot"></span> הוראת קבע בנקאית</label>
-</div></div>
-<div class="pay-info-box">
-  <div class="pi-title">📱 מה קורה אחרי שליחת הטופס?</div>
-  <div class="pi-sub">תקבל/י הודעת וואטסאפ מספיר עם פרטי התשלום תוך כמה דקות.</div>
-</div>
-</div>
-
-<!-- Payment: subscription -->
-<div class="section pay-section" data-sec="5" id="paySub">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="field"><div class="radio-group">
-<label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בכרטיס אשראי – חיוב חודשי אוטומטי"><span class="dot"></span> הוראת קבע באשראי - חודשי</label>
-<label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בנקאית"><span class="dot"></span> הוראת קבע בנקאית</label>
-</div></div></div>
 
 <div class="submit-section"><button type="submit" class="btn-submit" id="submitBtn">שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
 <p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח</p>
@@ -159,11 +134,9 @@ document.querySelectorAll('#masterConsent').forEach(function(m) {
 });
 
 function getPkgCat(pkg) {
-  if (pkg.paymentType === 'recurring') return 'sub';
-  if (pkg.period === 'חד פעמי') return 'onetime';
   var n = pkg.name || '';
-  if (n.indexOf('קבוצת') !== -1 || n.indexOf('קבוצה') !== -1) return 'group';
-  return 'monthly';
+  if (pkg.paymentType === 'recurring' || n.indexOf('מנוי') !== -1) return 'sub';
+  return 'onetime';
 }
 
 function fmtNum(v) { return parseInt(String(v || '0').replace(/[^0-9]/g, ''), 10) || 0; }
@@ -178,34 +151,39 @@ function attachPkgHandlers() {
       currentPrice = price;
       var pkgNameEl = c.querySelector('.pkg-name');
       currentPkgName = pkgNameEl ? pkgNameEl.textContent : '';
-      document.getElementById('priceDisplay').style.display = 'block';
-      document.getElementById('priceAmount').textContent = price.toLocaleString() + ' ₪';
       var cat = c.dataset.cat;
-      var periodLabel = { onetime: 'תשלום חד פעמי', monthly: 'מחיר חודשי', group: 'מחיר חודשי', sub: 'מחיר חודשי (הוראת קבע)' };
-      document.getElementById('priceLabel').textContent = periodLabel[cat] || 'מחיר';
-      // Update package summary boxes in payment sections
       var priceStr = price.toLocaleString() + ' ₪';
-      var nameOne = document.getElementById('pkgSummaryOnetimeName');
-      var priceOne = document.getElementById('pkgSummaryOnetimePrice');
-      var nameMon = document.getElementById('pkgSummaryMonthlyName');
-      var priceMon = document.getElementById('pkgSummaryMonthlyPrice');
-      if (nameOne) nameOne.textContent = currentPkgName;
-      if (priceOne) priceOne.textContent = priceStr;
-      if (nameMon) nameMon.textContent = currentPkgName;
-      if (priceMon) priceMon.textContent = priceStr;
-      document.querySelectorAll('.pay-section input[type=radio]').forEach(function(r) { r.checked = false; r.required = false; });
-      document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
-      if (cat === 'onetime') {
-        document.getElementById('payOnetime').classList.add('show');
-        document.querySelector('#payOnetime input[type=radio]').required = true;
-      } else if (cat === 'group' || cat === 'monthly') {
-        document.getElementById('payMonthly').classList.add('show');
-        document.querySelector('#payMonthly input[type=radio]').required = true;
-        document.getElementById('bitOption').style.display = (cat === 'group') ? 'flex' : 'none';
-      } else if (cat === 'sub') {
-        document.getElementById('paySub').classList.add('show');
-        document.querySelector('#paySub input[type=radio]').required = true;
+      // Top-of-form price-display
+      document.getElementById('priceDisplay').style.display = 'block';
+      document.getElementById('priceAmount').textContent = priceStr;
+      var periodLabel = { onetime: 'תשלום חד פעמי', sub: 'מחיר חודשי (הוראת קבע)' };
+      document.getElementById('priceLabel').textContent = periodLabel[cat] || 'מחיר';
+      // Unified payment-section: summary + auto type
+      var sumName = document.getElementById('pkgSummaryName');
+      var sumPrice = document.getElementById('pkgSummaryPrice');
+      if (sumName) sumName.textContent = currentPkgName;
+      if (sumPrice) sumPrice.textContent = priceStr + (cat === 'sub' ? ' / חודש' : '');
+      // Payment type info + hidden inputs (preserving Google Form entry IDs)
+      var title = document.getElementById('payTypeTitle');
+      var sub = document.getElementById('payTypeSub');
+      var hidOne = document.getElementById('hidOnetime');
+      var hidMon = document.getElementById('hidMonthly');
+      var hidSub = document.getElementById('hidSub');
+      if (hidOne) hidOne.value = '';
+      if (hidMon) hidMon.value = '';
+      if (hidSub) hidSub.value = '';
+      if (cat === 'sub') {
+        if (title) title.textContent = '🔁 הוראת קבע חודשית';
+        if (sub) sub.textContent = 'חיוב חודשי אוטומטי. את/ה בוחר/ת את האמצעי (אשראי/Bit/PayBox) במסך התשלום הבא.';
+        if (hidSub) hidSub.value = 'הוראת קבע בכרטיס אשראי – חיוב חודשי אוטומטי';
+        if (hidMon) hidMon.value = 'הוראת קבע בכרטיס אשראי — חיוב חודשי אוטומטי';
+      } else {
+        if (title) title.textContent = '💳 תשלום חד פעמי';
+        if (sub) sub.textContent = 'חיוב יחיד. את/ה בוחר/ת את האמצעי (אשראי/Bit/PayBox) במסך התשלום הבא.';
+        if (hidOne) hidOne.value = 'כרטיס אשראי – תשלום חד פעמי';
       }
+      document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
+      document.getElementById('payUnified').classList.add('show');
     });
   });
 }
@@ -239,12 +217,11 @@ function loadPackages() {
       renderPackages([
         { name: 'שיעור ניסיון', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון אישי 1:1', price: '350', period: 'חד פעמי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים חודשית', price: '1200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 8 אימונים חודשית', price: '2200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת נשים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת גברים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת בנות', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים - מנוי', price: '1200', period: 'חודשי', paymentType: 'recurring' }
+        { name: 'חבילת 4 אימונים - מנוי', price: '1200', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'חבילת 8 אימונים - מנוי', price: '2200', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת נשים - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת גברים - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנות - מנוי', price: '400', period: 'חודשי', paymentType: 'recurring' }
       ]);
     });
 }
@@ -256,7 +233,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   btn.disabled = true;
   btn.textContent = 'שולח...';
   var fd = new FormData();
-  this.querySelectorAll('input[type=text],input[type=tel],input[type=email]').forEach(function(i) { if (i.name) fd.append(i.name, i.value); });
+  this.querySelectorAll('input[type=text],input[type=tel],input[type=email],input[type=hidden]').forEach(function(i) { if (i.name && i.value) fd.append(i.name, i.value); });
   this.querySelectorAll('textarea').forEach(function(t) { if (t.name && t.value) fd.append(t.name, t.value); });
   var dob = document.getElementById('dobInput').value;
   if (dob) { var p = dob.split('-'); fd.append('entry.1066732080_year',p[0]); fd.append('entry.1066732080_month',p[1]); fd.append('entry.1066732080_day',p[2]); }
