@@ -6,35 +6,57 @@
 <title>הצטרפות למועדון</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;600;700&display=swap" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0a0a0c;--surface:#111115;--card:#16161c;--border:#2a2a35;--accent:#e63946;--accent2:#ff6b6b;--gold:#d4a853;--text:#e8e6e3;--muted:#8a8a9a;--input-bg:#1c1c24;--success:#2ecc71}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}.hero{position:relative;padding:40px 20px 30px;overflow:hidden}.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(230,57,70,.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(212,168,83,.08) 0%,transparent 50%),linear-gradient(180deg,#0a0a0c,#111118);z-index:1}.hero-pattern{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,transparent,transparent 20px,#fff 20px,#fff 21px),repeating-linear-gradient(-45deg,transparent,transparent 20px,#fff 20px,#fff 21px);z-index:0}.hero-content{position:relative;z-index:2;max-width:700px;margin:0 auto;text-align:center}.hero-logo{width:240px;max-width:90%;height:auto;aspect-ratio:1095/1069;object-fit:contain;display:block;margin:0 auto 20px;padding:8px 0;filter:drop-shadow(0 8px 30px rgba(0,0,0,.5))}@media(max-width:500px){.hero-logo{width:200px}}.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(230,57,70,.12);border:1px solid rgba(230,57,70,.3);color:var(--accent2);font-size:12px;font-weight:600;padding:5px 14px;border-radius:100px;margin-bottom:16px;letter-spacing:.5px}.badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}.hero h1{font-family:'Rubik',sans-serif;font-size:clamp(30px,6vw,44px);font-weight:700;line-height:1.15;margin-bottom:10px;color:#ffffff;text-shadow:0 2px 24px rgba(212,168,83,.5),0 4px 12px rgba(0,0,0,.4)}.hero p{color:var(--muted);font-size:14px;line-height:1.6;max-width:520px;margin:0 auto}.progress-bar{position:sticky;top:0;z-index:100;background:rgba(17,17,21,.92);border-bottom:1px solid var(--border);padding:14px 20px;backdrop-filter:blur(12px)}.progress-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:10px}.progress-steps{flex:1;display:flex;gap:4px}.progress-step{flex:1;height:4px;border-radius:4px;background:var(--border);transition:background .5s,box-shadow .5s}.progress-step.active{background:var(--accent);box-shadow:0 0 10px rgba(230,57,70,.4)}.progress-step.done{background:var(--success)}.progress-label{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:500}.form-wrap{max-width:700px;margin:0 auto;padding:20px 20px 80px}.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;margin-bottom:20px;animation:fadeUp .6s ease both}.section:nth-child(2){animation-delay:.08s}.section:nth-child(3){animation-delay:.16s}.section:nth-child(4){animation-delay:.24s}.section:nth-child(5){animation-delay:.32s}.section:nth-child(6){animation-delay:.4s}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.section-header{display:flex;align-items:center;gap:12px;margin-bottom:4px}.section-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}.section-icon.red{background:rgba(230,57,70,.12);color:var(--accent)}.section-icon.gold{background:rgba(212,168,83,.12);color:var(--gold)}.section-icon.green{background:rgba(46,204,113,.12);color:var(--success)}.section-icon.blue{background:rgba(100,149,237,.12);color:cornflowerblue}.section-icon.purple{background:rgba(155,89,182,.12);color:#bb8fce}.section-icon.orange{background:rgba(243,156,18,.12);color:#f39c12}.section h2{font-family:'Rubik',sans-serif;font-size:19px;font-weight:700}.section .sub{font-size:13px;color:var(--muted);margin-bottom:20px;margin-top:2px}.field{margin-bottom:18px}.field:last-child{margin-bottom:0}label.flabel{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}label .req{color:var(--accent);margin-right:2px}input[type=text],input[type=tel],input[type=email],input[type=date],textarea{width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Heebo',sans-serif;font-size:15px;color:var(--text);transition:border-color .2s,box-shadow .2s;outline:none;-webkit-appearance:none}input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,57,70,.12)}input::placeholder,textarea::placeholder{color:#555}textarea{resize:vertical;min-height:60px}.radio-group,.check-group{display:flex;flex-direction:column;gap:8px}.radio-group.inline{flex-direction:row;flex-wrap:wrap;gap:8px}.radio-option,.check-option{display:flex;align-items:center;gap:10px;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:border-color .2s,background .2s;font-size:14px}.radio-option:hover,.check-option:hover{border-color:var(--accent);background:rgba(230,57,70,.04)}.radio-option input,.check-option input{display:none}.radio-option .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s}.radio-option .dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);transform:scale(0);transition:transform .2s}.radio-option input:checked ~ .dot{border-color:var(--accent)}.radio-option input:checked ~ .dot::after{transform:scale(1)}.check-option .box{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,background .2s}.check-option .box::after{content:'\2713';font-size:11px;color:#fff;opacity:0;transition:opacity .2s}.check-option input:checked ~ .box{border-color:var(--accent);background:var(--accent)}.check-option input:checked ~ .box::after{opacity:1}.check-option .txt{font-size:13px;line-height:1.5}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:500px){.row{grid-template-columns:1fr}}.conditional{display:none;margin-top:12px;padding:14px;background:rgba(230,57,70,.04);border:1px solid rgba(230,57,70,.15);border-radius:10px}.conditional.show{display:block}.pkg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:500px){.pkg-grid{grid-template-columns:1fr}}.pkg-card{position:relative;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}.pkg-card:hover{border-color:var(--gold);background:rgba(212,168,83,.04);transform:translateY(-1px)}.pkg-card.selected{border-color:var(--gold);background:rgba(212,168,83,.08);box-shadow:0 0 16px rgba(212,168,83,.15)}.pkg-card input{display:none}.pkg-name{font-weight:600;font-size:14px;margin-bottom:4px}.pkg-price{font-size:18px;font-weight:700;color:var(--gold);font-family:'Rubik',sans-serif}.pkg-check{position:absolute;top:12px;left:12px;width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;transition:all .2s}.pkg-card.selected .pkg-check{border-color:var(--gold);background:var(--gold)}.pkg-card.selected .pkg-check::after{content:'\2713'}.pkg-loading{grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:14px}.pkg-error{grid-column:1/-1;text-align:center;padding:16px;color:var(--accent2);font-size:13px;background:rgba(230,57,70,.06);border-radius:10px;border:1px solid rgba(230,57,70,.2)}.price-display{background:linear-gradient(135deg,rgba(212,168,83,.08),rgba(212,168,83,.02));border:1px solid rgba(212,168,83,.2);border-radius:12px;padding:16px;text-align:center;margin-top:14px}.price-display .amount{font-family:'Rubik',sans-serif;font-size:28px;font-weight:700;color:var(--gold)}.price-display .plabel{font-size:12px;color:var(--muted);margin-top:2px}.submit-section{text-align:center;padding-top:10px}.btn-submit{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent),#c0392b);color:#fff;font-family:'Rubik',sans-serif;font-size:17px;font-weight:700;padding:16px 48px;border:none;border-radius:12px;cursor:pointer;transition:transform .2s,box-shadow .2s;letter-spacing:.5px}.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(230,57,70,.35)}.btn-submit:active{transform:translateY(0)}.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}.footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 28px;border-radius:12px;font-weight:600;font-size:15px;z-index:999;transition:transform .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 40px rgba(0,0,0,.4)}.toast.success{background:var(--success);color:#fff}.toast.show{transform:translateX(-50%) translateY(0)}.pay-section{display:none}.pay-section.show{display:block}
-.pay-app-box{display:none;margin-top:14px;background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(46,204,113,.02));border:1px solid rgba(46,204,113,.25);border-radius:12px;padding:16px 18px}
-.pay-app-box.show{display:block}
-.pay-app-box .pa-title{font-size:13px;font-weight:700;color:var(--success);margin-bottom:4px}
-.pay-app-box .pa-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
-.btn-pay-app{display:inline-flex;align-items:center;gap:8px;background:var(--success);color:#fff;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;transition:opacity .2s}
-.btn-pay-app:hover{opacity:.88}
+.pay-info-box{margin-top:14px;background:rgba(100,149,237,.06);border:1px solid rgba(100,149,237,.25);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6}
+.pay-info-box .pi-title{font-weight:700;color:cornflowerblue;margin-bottom:4px;font-size:13px}
+.pay-info-box .pi-sub{color:var(--muted);font-size:12px}
+.subsec-title{font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;color:var(--gold);margin-top:18px;margin-bottom:10px}
+.subsec-title:first-of-type{margin-top:6px}
+.consent-info{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:10px;padding:12px 14px;background:rgba(255,255,255,.02);border-radius:8px;border-right:3px solid var(--gold)}
+.consent-info strong{color:var(--text);font-weight:700}
+.pkg-summary{background:linear-gradient(135deg,rgba(212,168,83,.12),rgba(212,168,83,.04));border:1px solid rgba(212,168,83,.3);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pkg-summary .ps-name{color:var(--text);font-weight:600}
+.pkg-summary .ps-price{color:var(--gold);font-weight:700;font-family:'Rubik',sans-serif;font-size:16px}
 </style>
 </head>
 <body>
-<div class="hero"><div class="hero-pattern"></div><div class="hero-content"><img src="amazons-logo.jpg" alt="Amazons Logo" class="hero-logo"><div class="badge">הרשמה פתוחה</div><h1>הצטרפות למועדון</h1><p>טופס הרשמה, מידע בריאותי, הסכמה לתנאי הפעילות ובחירת חבילה.</p></div></div>
+<div class="hero"><div class="hero-pattern"></div><div class="hero-content"><img src="https://raw.githubusercontent.com/hemichaeli/club-registration/preview/ux-v1/amazons-logo.jpg" alt="Amazons Logo" class="hero-logo"><div class="badge">הרשמה פתוחה</div><h1>הצטרפות למועדון</h1><p>טופס הרשמה, מידע בריאותי, הסכמה לתנאי הפעילות ובחירת חבילה.</p></div></div>
 <div class="progress-bar"><div class="progress-inner"><span class="progress-label">שלב <span id="stepNum">1</span>/6</span><div class="progress-steps"><div class="progress-step active" data-step="0"></div><div class="progress-step" data-step="1"></div><div class="progress-step" data-step="2"></div><div class="progress-step" data-step="3"></div><div class="progress-step" data-step="4"></div><div class="progress-step" data-step="5"></div></div></div></div>
 <form class="form-wrap" id="mainForm">
 
 <!-- 0: פרטים אישיים -->
-<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז." required inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div></div>
+<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום.</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div><div class="field"><label class="flabel">תעודת זהות <span style="color:var(--muted);font-weight:400;font-size:12px">(לא חובה · נחוץ רק להפקת חשבונית מס-קבלה)</span></label><input type="text" name="entry.842454738" placeholder="מספר ת.ז." inputmode="numeric"></div></div>
 
-<!-- 1: מידע בריאותי -->
-<div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F3E5;</div><h2>מידע בריאותי</h2></div><p class="sub">חיוני לבטיחותך באימונים</p><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי"><span class="dot"></span> אולי</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן" data-show="medsDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים" data-show="medsDetail"><span class="dot"></span> לעיתים</label></div><div class="conditional" id="medsDetail"><label class="flabel">פרט/י</label><textarea name="entry.1215413202" placeholder="שם התרופה ומינון..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן" data-show="mobilityDetail"><span class="dot"></span> כן</label></div><div class="conditional" id="mobilityDetail"><label class="flabel">פרט/י</label><textarea name="entry.1447318397" placeholder="תאר/י את המגבלות..."></textarea></div></div></div>
+<!-- 1: הניסיון והבריאות שלך -->
+<div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F94A;</div><h2>הניסיון והבריאות שלך</h2></div><p class="sub">נכיר אותך קצת ונוודא שהאימונים בטוחים.</p><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי"><span class="dot"></span> אולי</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן" data-show="medsDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים" data-show="medsDetail"><span class="dot"></span> לעיתים</label></div><div class="conditional" id="medsDetail"><label class="flabel">פרט/י</label><textarea name="entry.1215413202" placeholder="שם התרופה ומינון..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן" data-show="mobilityDetail"><span class="dot"></span> כן</label></div><div class="conditional" id="mobilityDetail"><label class="flabel">פרט/י</label><textarea name="entry.1447318397" placeholder="תאר/י את המגבלות..."></textarea></div></div></div>
 
-<!-- 2: איש קשר -->
-<div class="section" data-sec="2"><div class="section-header"><div class="section-icon blue">&#x1F4DE;</div><h2>איש קשר לחירום</h2></div><p class="sub">פרטי איש קשר למקרה חירום</p><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> שם מלא</label><input type="text" name="entry.1762689145" placeholder="שם מלא" required></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.1630881508" placeholder="050-0000000" required></div></div></div>
+<!-- 2: איש קשר נוסף -->
+<div class="section" data-sec="2"><div class="section-header"><div class="section-icon blue">&#x1F465;</div><h2>איש קשר נוסף</h2></div><p class="sub">למקרה של עדכון (לא חובה).</p><div class="row"><div class="field"><label class="flabel">שם מלא</label><input type="text" name="entry.1762689145" placeholder="שם מלא"></div><div class="field"><label class="flabel">מספר טלפון</label><input type="tel" name="entry.1630881508" placeholder="050-0000000"></div></div></div>
 
-<!-- 3: הצהרת אחריות -->
-<div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרת אחריות</h2></div><p class="sub">קרא/י ואשר/י את כל הסעיפים</p><div class="check-group"><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי תקין וכי אעדכן את המאמן/ת בכל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי תקין ואעדכן את המאמן/ת בכל שינוי</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים סיכון לפציעות, ומסכימה שלא להגיש תביעות נגד המאמנ/ת" required><span class="box"></span><span class="txt">מבין/ה סיכון לפציעות, מסכים/ה שלא להגיש תביעות</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים מגע פיזי עם מאמנים ומתאמנים אחרים, ומסכימ/ה לכך" required><span class="box"></span><span class="txt">מבין/ה שהאימונים כוללים מגע פיזי, מסכים/ה</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה ונוטלת על עצמי את הסיכונים הכרוכים בפעילויות ספארים/קרבות מבוקרים, אם וכאשר יתקיימו" required><span class="box"></span><span class="txt">נוטל/ת על עצמי סיכונים בספארים/קרבות מבוקרים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="במקרה חירום רפואי, אני מסכימ/ה שהצוות יספק לי עזרה ראשונה ויפנה אותי לטיפול רפואי נדרש, כולל פינוי באמבולנס, על חשבוני" required><span class="box"></span><span class="txt">מסכים/ה לעזרה ראשונה ופינוי כולל אמבולנס על חשבוני</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מתחייב/ת לציית לכללי הבטיחות ולהוראות המאמנים בכל עת" required><span class="box"></span><span class="txt">מתחייב/ת לציית לכללי בטיחות ולהוראות המאמנים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת את מדיניות הביטול: הודעה על הפסקת חברות במועדון שתינתן לאחר ה-15 לחודש תחייב תשלום עבור החודש הבא. הודעה שתינתן עד ה-15 לחודש תעצור את החיוב בסוף אותו חודש." required><span class="box"></span><span class="txt">מדיניות ביטול: לאחר ה-15 = תשלום החודש הבא. עד ה-15 = עצירת חיוב</span></label></div></div>
+<!-- 3: הצהרה והסכמה -->
+<div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרה והסכמה</h2></div><p class="sub">נא לאשר את הסעיפים הבאים.</p>
+
+<h3 class="subsec-title">הצהרת בריאות</h3>
+<label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי מאפשר לי פעילות גופנית ולקחת חלק באימונים מסוג אומנות לחימה הכוללים מגע, ואעדכן את המאמנ/ת על כל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי מאפשר לי פעילות גופנית ולקחת חלק באימונים מסוג אומנות לחימה הכוללים מגע, ואעדכן את המאמנ/ת על כל שינוי.</span></label>
+
+<h3 class="subsec-title">הסכמה לתנאי הפעילות</h3>
+<div class="consent-info">אני מבינ/ה שהאימונים כוללים:<br>• מגע פיזי עם מאמנים ומתאמנים.<br>• סיכון סביר לפציעות, כמו בכל פעילות ספורט.<br>• במקרה פציעה: עזרה ראשונה ופינוי רפואי אם יידרש, על חשבוני.<br>• השתתפות אפשרית בספארים/קרבות מבוקרים, אם וכאשר יתקיימו.</div>
+<label class="check-option"><input type="checkbox" id="masterConsent" required><span class="box"></span><span class="txt">הבנתי ומסכימ/ה לתנאי הפעילות, ומתחייב/ת לציית להוראות הבטיחות של המאמנים.</span></label>
+<input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים סיכון לפציעות, ומסכימה שלא להגיש תביעות נגד המאמנ/ת" hidden>
+<input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים מגע פיזי עם מאמנים ומתאמנים אחרים, ומסכימ/ה לכך" hidden>
+<input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="אני מבינ/ה ונוטלת על עצמי את הסיכונים הכרוכים בפעילויות ספארים/קרבות מבוקרים, אם וכאשר יתקיימו" hidden>
+<input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="במקרה חירום רפואי, אני מסכימ/ה שהצוות יספק לי עזרה ראשונה ויפנה אותי לטיפול רפואי נדרש, כולל פינוי רפואי אם יידרש, על חשבוני" hidden>
+<input type="checkbox" class="hidden-sync" data-master="masterConsent" name="entry.493779591" value="אני מתחייב/ת לציית לכללי הבטיחות ולהוראות המאמנים בכל עת" hidden>
+
+<h3 class="subsec-title">מדיניות ביטול</h3>
+<div class="consent-info">כדי שנוכל לתכנן את המערכת, חשוב לנו לדעת מראש:<br>★ הודעה <strong>עד ה-15 לחודש</strong> — החיוב עוצר בסוף החודש.<br>★ הודעה <strong>אחרי ה-15 לחודש</strong> — יחויב גם החודש הבא.<br>★ ניתן להודיע בהודעה מסודרת בוואטסאפ בכל עת.<br>★ <strong>מנוי קבוצה</strong>: אפשר להקפיא עד שבועיים, ונקבל אותם כשבועיים נוספים בסוף שנת המנוי ללא עלות.</div>
+<label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת את מדיניות הביטול: הודעה על הפסקת חברות במועדון שתינתן לאחר ה-15 לחודש תחייב תשלום עבור החודש הבא. הודעה שתינתן עד ה-15 לחודש תעצור את החיוב בסוף אותו חודש." required><span class="box"></span><span class="txt">הבנתי את מדיניות הביטול.</span></label>
+
+</div>
 
 <!-- 4: בחירת חבילה -->
 <div class="section" data-sec="4">
   <div class="section-header"><div class="section-icon purple">&#x1F4E6;</div><h2>בחירת חבילה</h2></div>
-  <p class="sub">בחר/י את החבילה המתאימה</p>
+  <p class="sub">בחר/י את החבילה המתאימה.</p>
   <div class="pkg-grid" id="pkgGrid">
     <div class="pkg-loading">טוען חבילות...</div>
   </div>
@@ -44,59 +66,34 @@
   </div>
 </div>
 
-<!-- Payment: one-time packages -->
-<div class="section pay-section" data-sec="5" id="payOnetime">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="field"><div class="radio-group" id="radioOnetime">
-<label class="radio-option"><input type="radio" name="entry.324474069" value="כרטיס אשראי – תשלום חד פעמי" data-app="none"><span class="dot"></span> כרטיס אשראי - חד פעמי</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="פייבוקס - PayBox" data-app="paybox"><span class="dot"></span> PayBox</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="ביט - Bit" data-app="bit"><span class="dot"></span> Bit - ביט</label>
-<label class="radio-option"><input type="radio" name="entry.324474069" value="מזומן" data-app="none"><span class="dot"></span> מזומן</label>
-</div></div>
-<div class="pay-app-box" id="appBoxOnetime">
-  <div class="pa-title" id="appBoxOnetimeTitle">📲 פתח/י את האפליקציה לתשלום</div>
-  <div class="pa-sub">ספיר תוגדר אוטומטית כנמענת עם הסכום הנכון</div>
-  <a class="btn-pay-app" id="appBtnOnetime" href="#" target="_blank">פתח/י ושלח/י תשלום</a>
+<!-- Payment: unified (auto-determined by package type) -->
+<div class="section pay-section" data-sec="5" id="payUnified">
+<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>סיכום ותשלום</h2></div><p class="sub">אופן התשלום נקבע לפי החבילה שבחרת.</p>
+<div class="pkg-summary"><span class="ps-name" id="pkgSummaryName">—</span><span class="ps-price" id="pkgSummaryPrice">—</span></div>
+<div class="pay-info-box" style="background:rgba(212,168,83,.06);border-color:rgba(212,168,83,.25);margin-top:10px">
+  <div class="pi-title" id="payTypeTitle" style="color:var(--gold);font-size:14px">—</div>
+  <div class="pi-sub" id="payTypeSub">—</div>
 </div>
+<div class="pay-info-box" style="margin-top:10px">
+  <div class="pi-title">📱 מה קורה אחרי שליחת הטופס?</div>
+  <div class="pi-sub">תקבל/י הודעת וואטסאפ מספיר עם קישור לתשלום מאובטח ב-iCount, שם תוכל/י לבחור: אשראי / Bit / PayBox / הוראת קבע.</div>
 </div>
-
-<!-- Payment: monthly + group packages -->
-<div class="section pay-section" data-sec="5" id="payMonthly">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="field"><div class="radio-group" id="radioMonthly">
-<label class="radio-option"><input type="radio" name="entry.646554335" value="כרטיס אשראי — תשלום חד פעמי" data-app="none"><span class="dot"></span> כרטיס אשראי - חד פעמי</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="הוראת קבע בכרטיס אשראי — חיוב חודשי אוטומטי" data-app="none"><span class="dot"></span> הוראת קבע באשראי - חודשי</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="פייבוקס - PayBox" data-app="paybox"><span class="dot"></span> PayBox</label>
-<label class="radio-option" id="bitOption"><input type="radio" name="entry.646554335" value="ביט - Bit" data-app="bit"><span class="dot"></span> Bit - ביט</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="העברה בנקאית" data-app="none"><span class="dot"></span> העברה בנקאית</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="מזומן" data-app="none"><span class="dot"></span> מזומן</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="הוראת קבע בנקאית" data-app="none"><span class="dot"></span> הוראת קבע בנקאית</label>
-</div></div>
-<div class="pay-app-box" id="appBoxMonthly">
-  <div class="pa-title" id="appBoxMonthlyTitle">📲 פתח/י את האפליקציה לתשלום</div>
-  <div class="pa-sub">ספיר תוגדר אוטומטית כנמענת עם הסכום הנכון</div>
-  <a class="btn-pay-app" id="appBtnMonthly" href="#" target="_blank">פתח/י ושלח/י תשלום</a>
+<!-- Hidden inputs preserve Google Form payment-method entry values (auto-filled by JS) -->
+<input type="hidden" name="entry.324474069" id="hidOnetime" value="">
+<input type="hidden" name="entry.646554335" id="hidMonthly" value="">
+<input type="hidden" name="entry.1663473485" id="hidSub" value="">
 </div>
-</div>
-
-<!-- Payment: subscription -->
-<div class="section pay-section" data-sec="5" id="paySub">
-<div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
-<div class="field"><div class="radio-group">
-<label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בכרטיס אשראי – חיוב חודשי אוטומטי"><span class="dot"></span> הוראת קבע באשראי - חודשי</label>
-<label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בנקאית"><span class="dot"></span> הוראת קבע בנקאית</label>
-</div></div></div>
 
 <div class="submit-section"><button type="submit" class="btn-submit" id="submitBtn">שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
-<p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח</p>
+<p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח.</p>
 </form>
 <div class="toast" id="toast"></div>
 
 <script>
 var F = 'https://docs.google.com/forms/d/1wzjMttgoxSwzlg0zWMcudmr_80KtNEC1VppeHQL88tA/formResponse';
 var PKG_API = 'https://devoted-delight-production.up.railway.app/api/public/packages';
-var SAPIR_PHONE = '0543155130';
 var currentPrice = 0;
+var currentPkgName = '';
 
 var secs = document.querySelectorAll('.section[data-sec]');
 var ps = document.querySelectorAll('.progress-step');
@@ -127,47 +124,19 @@ document.querySelectorAll('[data-show]').forEach(function(r) {
   });
 });
 
-function buildPayLink(app, amount) {
-  if (app === 'bit') return 'https://bitpay.app.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
-  if (app === 'paybox') return 'https://payboxapp.page.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
-  return '#';
-}
-
-function attachPayAppListeners(radioGroup, box, btn, titleEl) {
-  radioGroup.querySelectorAll('input[type=radio]').forEach(function(r) {
-    r.addEventListener('change', function() {
-      var app = r.dataset.app || 'none';
-      if (app === 'bit' || app === 'paybox') {
-        btn.href = buildPayLink(app, currentPrice);
-        titleEl.textContent = (app === 'bit' ? '📲 שלמ/י דרך Bit' : '📲 שלמ/י דרך PayBox');
-        btn.textContent = (app === 'bit' ? 'פתח/י Bit — ' : 'פתח/י PayBox — ') + currentPrice.toLocaleString() + ' ₪ לספיר';
-        box.classList.add('show');
-      } else {
-        box.classList.remove('show');
-      }
+// Sync master consent checkbox to hidden siblings (preserves Google Form values)
+document.querySelectorAll('#masterConsent').forEach(function(m) {
+  m.addEventListener('change', function() {
+    document.querySelectorAll('.hidden-sync[data-master="masterConsent"]').forEach(function(h) {
+      h.checked = m.checked;
     });
   });
-}
-
-attachPayAppListeners(
-  document.getElementById('radioOnetime'),
-  document.getElementById('appBoxOnetime'),
-  document.getElementById('appBtnOnetime'),
-  document.getElementById('appBoxOnetimeTitle')
-);
-attachPayAppListeners(
-  document.getElementById('radioMonthly'),
-  document.getElementById('appBoxMonthly'),
-  document.getElementById('appBtnMonthly'),
-  document.getElementById('appBoxMonthlyTitle')
-);
+});
 
 function getPkgCat(pkg) {
-  if (pkg.paymentType === 'recurring') return 'sub';
-  if (pkg.period === 'חד פעמי') return 'onetime';
   var n = pkg.name || '';
-  if (n.indexOf('קבוצת') !== -1 || n.indexOf('קבוצה') !== -1) return 'group';
-  return 'monthly';
+  if (pkg.paymentType === 'recurring' || n.indexOf('מנוי') !== -1) return 'sub';
+  return 'onetime';
 }
 
 function fmtNum(v) { return parseInt(String(v || '0').replace(/[^0-9]/g, ''), 10) || 0; }
@@ -180,32 +149,48 @@ function attachPkgHandlers() {
       c.classList.add('selected');
       var price = parseInt(c.dataset.price, 10);
       currentPrice = price;
-      document.getElementById('priceDisplay').style.display = 'block';
-      document.getElementById('priceAmount').textContent = price.toLocaleString() + ' ₪';
+      var pkgNameEl = c.querySelector('.pkg-name');
+      currentPkgName = pkgNameEl ? pkgNameEl.textContent : '';
       var cat = c.dataset.cat;
-      var periodLabel = { onetime: 'תשלום חד פעמי', monthly: 'מחיר חודשי', group: 'מחיר חודשי', sub: 'מחיר חודשי (הוראת קבע)' };
+      var priceStr = price.toLocaleString() + ' ₪';
+      // Top-of-form price-display
+      document.getElementById('priceDisplay').style.display = 'block';
+      document.getElementById('priceAmount').textContent = priceStr;
+      var periodLabel = { onetime: 'תשלום חד פעמי', sub: 'מחיר חודשי (הוראת קבע)' };
       document.getElementById('priceLabel').textContent = periodLabel[cat] || 'מחיר';
-      document.querySelectorAll('.pay-section input[type=radio]').forEach(function(r) { r.checked = false; r.required = false; });
-      document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
-      document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
-      if (cat === 'onetime') {
-        document.getElementById('payOnetime').classList.add('show');
-        document.querySelector('#payOnetime input[type=radio]').required = true;
-      } else if (cat === 'group' || cat === 'monthly') {
-        document.getElementById('payMonthly').classList.add('show');
-        document.querySelector('#payMonthly input[type=radio]').required = true;
-        document.getElementById('bitOption').style.display = (cat === 'group') ? 'flex' : 'none';
-      } else if (cat === 'sub') {
-        document.getElementById('paySub').classList.add('show');
-        document.querySelector('#paySub input[type=radio]').required = true;
+      // Unified payment-section: summary + auto type
+      var sumName = document.getElementById('pkgSummaryName');
+      var sumPrice = document.getElementById('pkgSummaryPrice');
+      if (sumName) sumName.textContent = currentPkgName;
+      if (sumPrice) sumPrice.textContent = priceStr + (cat === 'sub' ? ' / חודש' : '');
+      // Payment type info + hidden inputs (preserving Google Form entry IDs)
+      var title = document.getElementById('payTypeTitle');
+      var sub = document.getElementById('payTypeSub');
+      var hidOne = document.getElementById('hidOnetime');
+      var hidMon = document.getElementById('hidMonthly');
+      var hidSub = document.getElementById('hidSub');
+      if (hidOne) hidOne.value = '';
+      if (hidMon) hidMon.value = '';
+      if (hidSub) hidSub.value = '';
+      if (cat === 'sub') {
+        if (title) title.textContent = '🔁 הוראת קבע חודשית';
+        if (sub) sub.textContent = 'חיוב חודשי אוטומטי. את/ה בוחר/ת את האמצעי (אשראי/Bit/PayBox) במסך התשלום הבא.';
+        if (hidSub) hidSub.value = 'הוראת קבע בכרטיס אשראי – חיוב חודשי אוטומטי';
+        if (hidMon) hidMon.value = 'הוראת קבע בכרטיס אשראי — חיוב חודשי אוטומטי';
+      } else {
+        if (title) title.textContent = '💳 תשלום חד פעמי';
+        if (sub) sub.textContent = 'חיוב יחיד. את/ה בוחר/ת את האמצעי (אשראי/Bit/PayBox) במסך התשלום הבא.';
+        if (hidOne) hidOne.value = 'כרטיס אשראי – תשלום חד פעמי';
       }
+      document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
+      document.getElementById('payUnified').classList.add('show');
     });
   });
 }
 
 function renderPackages(packages) {
   var grid = document.getElementById('pkgGrid');
-  if (!packages || !packages.length) { grid.innerHTML = '<div class="pkg-error">לא נמצאו חבילות פעילות</div>'; return; }
+  if (!packages || !packages.length) { grid.innerHTML = '<div class="pkg-error">לא נמצאו חבילות פעילות.</div>'; return; }
   grid.innerHTML = packages.map(function(pkg) {
     var cat = getPkgCat(pkg);
     var origP = fmtNum(pkg.price);
@@ -230,14 +215,14 @@ function loadPackages() {
     .then(function(data) { renderPackages(data.packages || []); })
     .catch(function(err) {
       renderPackages([
-        { name: 'שיעור ניסיון', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
+        { name: 'שיעור ניסיון בקבוצה', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון אישי 1:1', price: '350', period: 'חד פעמי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים חודשית', price: '1200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 8 אימונים חודשית', price: '2200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת נשים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת גברים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת בנות', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים - מנוי', price: '1200', period: 'חודשי', paymentType: 'recurring' }
+        { name: 'חבילת 4 אימונים פרטיים/אישיים - מנוי חודשי', price: '1200', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'חבילת 8 אימונים פרטיים/אישיים - מנוי חודשי', price: '2400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת נשים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת גברים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנות - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' }
       ]);
     });
 }
@@ -249,7 +234,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   btn.disabled = true;
   btn.textContent = 'שולח...';
   var fd = new FormData();
-  this.querySelectorAll('input[type=text],input[type=tel],input[type=email]').forEach(function(i) { if (i.name) fd.append(i.name, i.value); });
+  this.querySelectorAll('input[type=text],input[type=tel],input[type=email],input[type=hidden]').forEach(function(i) { if (i.name && i.value) fd.append(i.name, i.value); });
   this.querySelectorAll('textarea').forEach(function(t) { if (t.name && t.value) fd.append(t.name, t.value); });
   var dob = document.getElementById('dobInput').value;
   if (dob) { var p = dob.split('-'); fd.append('entry.1066732080_year',p[0]); fd.append('entry.1066732080_month',p[1]); fd.append('entry.1066732080_day',p[2]); }
@@ -261,12 +246,11 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   setTimeout(function() { t.classList.remove('show'); }, 4000);
   var self = this;
   setTimeout(function() {
-    self.reset(); currentPrice = 0;
+    self.reset(); currentPrice = 0; currentPkgName = '';
     document.querySelectorAll('.pkg-card').forEach(function(c) { c.classList.remove('selected'); });
     document.getElementById('priceDisplay').style.display = 'none';
     document.querySelectorAll('.conditional').forEach(function(c) { c.classList.remove('show'); });
     document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
-    document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
     loadPackages();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     btn.disabled = false;
