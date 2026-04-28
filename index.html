@@ -12,6 +12,13 @@
 .pay-app-box .pa-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
 .btn-pay-app{display:inline-flex;align-items:center;gap:8px;background:var(--success);color:#fff;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;transition:opacity .2s}
 .btn-pay-app:hover{opacity:.88}
+.field.error label.flabel{color:var(--accent2)}
+.field.error input,.field.error textarea{border-color:var(--accent);background:rgba(230,57,70,.06)}
+.field.error .radio-option{border-color:var(--accent);background:rgba(230,57,70,.04)}
+.check-option.error{border-color:var(--accent);background:rgba(230,57,70,.08)}
+.pkg-card.error{border-color:var(--accent);background:rgba(230,57,70,.06)}
+.section.error{border-color:var(--accent);box-shadow:0 0 0 1px rgba(230,57,70,.3)}
+.toast.error{background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -23,13 +30,13 @@
 <div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז." required inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div></div>
 
 <!-- 1: מידע בריאותי -->
-<div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F3E5;</div><h2>מידע בריאותי</h2></div><p class="sub">חיוני לבטיחותך באימונים</p><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי"><span class="dot"></span> אולי</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן" data-show="medsDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים" data-show="medsDetail"><span class="dot"></span> לעיתים</label></div><div class="conditional" id="medsDetail"><label class="flabel">פרט/י</label><textarea name="entry.1215413202" placeholder="שם התרופה ומינון..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן" data-show="mobilityDetail"><span class="dot"></span> כן</label></div><div class="conditional" id="mobilityDetail"><label class="flabel">פרט/י</label><textarea name="entry.1447318397" placeholder="תאר/י את המגבלות..."></textarea></div></div></div>
+<div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F3E5;</div><h2>מידע בריאותי</h2></div><p class="sub">חיוני לבטיחותך באימונים</p><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי"><span class="dot"></span> אולי</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים"><span class="dot"></span> לעיתים</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן"><span class="dot"></span> כן</label></div></div></div>
 
 <!-- 2: איש קשר -->
 <div class="section" data-sec="2"><div class="section-header"><div class="section-icon blue">&#x1F4DE;</div><h2>איש קשר לחירום</h2></div><p class="sub">פרטי איש קשר למקרה חירום</p><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> שם מלא</label><input type="text" name="entry.1762689145" placeholder="שם מלא" required></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.1630881508" placeholder="050-0000000" required></div></div></div>
 
 <!-- 3: הצהרת אחריות -->
-<div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרת אחריות</h2></div><p class="sub">קרא/י ואשר/י את כל הסעיפים</p><div class="check-group"><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי תקין וכי אעדכן את המאמן/ת בכל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי תקין ואעדכן את המאמן/ת בכל שינוי</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים סיכון לפציעות, ומסכימה שלא להגיש תביעות נגד המאמנ/ת" required><span class="box"></span><span class="txt">מבין/ה סיכון לפציעות, מסכים/ה שלא להגיש תביעות</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים מגע פיזי עם מאמנים ומתאמנים אחרים, ומסכימ/ה לכך" required><span class="box"></span><span class="txt">מבין/ה שהאימונים כוללים מגע פיזי, מסכים/ה</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה ונוטלת על עצמי את הסיכונים הכרוכים בפעילויות ספארים/קרבות מבוקרים, אם וכאשר יתקיימו" required><span class="box"></span><span class="txt">נוטל/ת על עצמי סיכונים בספארים/קרבות מבוקרים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="במקרה חירום רפואי, אני מסכימ/ה שהצוות יספק לי עזרה ראשונה ויפנה אותי לטיפול רפואי נדרש, כולל פינוי באמבולנס, על חשבוני" required><span class="box"></span><span class="txt">מסכים/ה לעזרה ראשונה ופינוי כולל אמבולנס על חשבוני</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מתחייב/ת לציית לכללי הבטיחות ולהוראות המאמנים בכל עת" required><span class="box"></span><span class="txt">מתחייב/ת לציית לכללי בטיחות ולהוראות המאמנים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת את מדיניות הביטול: הודעה על הפסקת חברות במועדון שתינתן לאחר ה-15 לחודש תחייב תשלום עבור החודש הבא. הודעה שתינתן עד ה-15 לחודש תעצור את החיוב בסוף אותו חודש." required><span class="box"></span><span class="txt">מדיניות ביטול: לאחר ה-15 = תשלום החודש הבא. עד ה-15 = עצירת חיוב</span></label></div></div>
+<div class="section" data-sec="3"><div class="section-header"><div class="section-icon green">&#x270D;&#xFE0F;</div><h2>הצהרת אחריות</h2></div><p class="sub">קרא/י ואשר/י את כל הסעיפים</p><div class="check-group"><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת כי מצבי הבריאותי תקין וכי אעדכן את המאמן/ת בכל שינוי בעתיד" required><span class="box"></span><span class="txt">מצבי הבריאותי תקין ואעדכן את המאמן/ת בכל שינוי</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה שהאימונים כוללים מגע פיזי עם מאמנים ומתאמנים אחרים, דבר שבאופן טבעי עלול להוביל לפציעות, ומסכימ/ה לכך" required><span class="box"></span><span class="txt">מבין/ה שהאימונים כוללים מגע פיזי, דבר שבאופן טבעי עלול להוביל לפציעות, ומסכים/ה</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מבינ/ה ונוטלת על עצמי את הסיכונים הכרוכים בפעילויות ספארים/קרבות מבוקרים, אם וכאשר יתקיימו" required><span class="box"></span><span class="txt">נוטל/ת על עצמי סיכונים בספארים/קרבות מבוקרים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="במקרה חירום רפואי, אני מסכימ/ה שהצוות יספק לי עזרה ראשונה ויפנה אותי לטיפול רפואי נדרש, כולל פינוי באמבולנס, על חשבוני" required><span class="box"></span><span class="txt">מסכים/ה לעזרה ראשונה ופינוי כולל אמבולנס על חשבוני</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מתחייב/ת לציית לכללי הבטיחות ולהוראות המאמנים בכל עת" required><span class="box"></span><span class="txt">מתחייב/ת לציית לכללי בטיחות ולהוראות המאמנים</span></label><label class="check-option"><input type="checkbox" name="entry.493779591" value="אני מאשר/ת את מדיניות הביטול: הודעה על הפסקת חברות במועדון שתינתן לאחר ה-15 לחודש תחייב תשלום עבור החודש הבא. הודעה שתינתן עד ה-15 לחודש תעצור את החיוב בסוף אותו חודש." required><span class="box"></span><span class="txt">מדיניות ביטול: לאחר ה-15 = תשלום החודש הבא. עד ה-15 = עצירת חיוב</span></label></div></div>
 
 <!-- 4: בחירת חבילה -->
 <div class="section" data-sec="4">
@@ -94,7 +101,7 @@
 
 <script>
 var F = 'https://docs.google.com/forms/d/1wzjMttgoxSwzlg0zWMcudmr_80KtNEC1VppeHQL88tA/formResponse';
-var PKG_API = 'https://devoted-delight-production.up.railway.app/api/public/packages';
+var PKG_API = 'https://sapir-crm-system-production.up.railway.app/api/public/packages';
 var SAPIR_PHONE = '0543155130';
 var currentPrice = 0;
 
@@ -174,9 +181,11 @@ function fmtNum(v) { return parseInt(String(v || '0').replace(/[^0-9]/g, ''), 10
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function attachPkgHandlers() {
+  var firstPkgInput = document.querySelector('#pkgGrid input[type=radio]');
+  if (firstPkgInput) firstPkgInput.required = true;
   document.querySelectorAll('.pkg-card').forEach(function(c) {
     c.addEventListener('click', function() {
-      document.querySelectorAll('.pkg-card').forEach(function(x) { x.classList.remove('selected'); });
+      document.querySelectorAll('.pkg-card').forEach(function(x) { x.classList.remove('selected', 'error'); });
       c.classList.add('selected');
       var price = parseInt(c.dataset.price, 10);
       currentPrice = price;
@@ -211,10 +220,10 @@ function renderPackages(packages) {
     var origP = fmtNum(pkg.price);
     var saleP = pkg.salePrice ? fmtNum(pkg.salePrice) : 0;
     var displayP = saleP || origP;
-    var formVal = esc(pkg.name + ' \u2014 ' + origP.toLocaleString() + ' \u05e9"\u05d7');
+    var formVal = esc(pkg.name + ' — ' + origP.toLocaleString() + ' ש"ח');
     var priceHtml = saleP
-      ? '<s style="font-size:12px;color:var(--muted)">' + origP.toLocaleString() + ' \u20AA</s><div class="pkg-price">' + saleP.toLocaleString() + ' \u20AA</div>'
-      : '<div class="pkg-price">' + origP.toLocaleString() + ' \u20AA</div>';
+      ? '<s style="font-size:12px;color:var(--muted)">' + origP.toLocaleString() + ' ₪</s><div class="pkg-price">' + saleP.toLocaleString() + ' ₪</div>'
+      : '<div class="pkg-price">' + origP.toLocaleString() + ' ₪</div>';
     return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '">'
       + '<input type="radio" name="entry.729039732" value="' + formVal + '">'
       + '<div class="pkg-check"></div>'
@@ -230,21 +239,77 @@ function loadPackages() {
     .then(function(data) { renderPackages(data.packages || []); })
     .catch(function(err) {
       renderPackages([
-        { name: 'שיעור ניסיון', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
+        { name: 'שיעור ניסיון בקבוצה', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון אישי 1:1', price: '350', period: 'חד פעמי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים חודשית', price: '1200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 8 אימונים חודשית', price: '2200', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת נשים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת גברים', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'קבוצת בנות', price: '400', period: 'חודשי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים - מנוי', price: '1200', period: 'חודשי', paymentType: 'recurring' }
+        { name: 'חבילת 8 אימונים פרטיים/אישיים - מנוי חודשי', price: '2400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת נשים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת גברים - מנוי חודשי', price: '350', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'קבוצת בנות / בנים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' }
       ]);
     });
 }
 loadPackages();
 
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || 'success') + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 4000);
+}
+
+function clearAllErrors(form) {
+  form.querySelectorAll('.field.error,.check-option.error,.pkg-card.error,.section.error').forEach(function(el) {
+    el.classList.remove('error');
+  });
+}
+
+function validateForm(form) {
+  clearAllErrors(form);
+  var firstError = null;
+  var seenRadioGroups = {};
+
+  form.querySelectorAll('[required]').forEach(function(el) {
+    if (el.offsetParent === null && el.type !== 'radio') return;
+    var ok = true;
+    var target = null;
+
+    if (el.type === 'radio') {
+      if (seenRadioGroups[el.name]) return;
+      seenRadioGroups[el.name] = true;
+      ok = !!form.querySelector('input[type=radio][name="' + el.name + '"]:checked');
+      if (!ok) target = el.closest('.pkg-card') ? el.closest('#pkgGrid').closest('.section') : el.closest('.field') || el.closest('.section');
+    } else if (el.type === 'checkbox') {
+      ok = el.checked;
+      if (!ok) target = el.closest('.check-option') || el.closest('.field');
+    } else {
+      ok = el.value && el.value.trim().length > 0;
+      if (!ok) target = el.closest('.field');
+    }
+
+    if (!ok && target) {
+      target.classList.add('error');
+      if (!firstError) firstError = target;
+    }
+  });
+
+  if (firstError) {
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast('יש למלא את הטופס במלואו', 'error');
+    return false;
+  }
+  return true;
+}
+
+document.getElementById('mainForm').addEventListener('change', function(e) {
+  var t = e.target.closest('.check-option') || e.target.closest('.pkg-card') || e.target.closest('.field');
+  if (t) t.classList.remove('error');
+  var sec = e.target.closest('.section');
+  if (sec) sec.classList.remove('error');
+});
+
 document.getElementById('mainForm').addEventListener('submit', function(e) {
   e.preventDefault();
+  if (!validateForm(this)) return;
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'שולח...';
