@@ -155,7 +155,7 @@ document.querySelectorAll('[data-show]').forEach(function(r) {
 });
 
 function buildPayLink(app, amount) {
-  if (app === 'bit') return 'https://bitpay.app.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
+  if (app === 'bit') return 'https://www.bitpay.co.il/app/me/' + SAPIR_PHONE + '/' + amount;
   if (app === 'paybox') return 'https://payboxapp.page.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
   return '#';
 }
