@@ -363,6 +363,37 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   if (mText) combined.push('[תרופות] ' + mText);
   if (combined.length > 0) fd.append('entry.1215413202', combined.join('\n'));
   fetch(F, { method: 'POST', body: fd, mode: 'no-cors' }).then(function(){}).catch(function(){});
+
+  // Couple split: when "אימון זוגי" + split chosen, hit our backend to create 2 paypages
+  var coupleSplitEl = this.querySelector('input[name="coupleSplit"]:checked');
+  var selectedPkgCard = document.querySelector('.pkg-card.selected');
+  var isCouple = selectedPkgCard && selectedPkgCard.dataset.couple === '1';
+  if (isCouple && coupleSplitEl && coupleSplitEl.value === 'split') {
+    var partnerName = (this.querySelector('input[name="couplePartnerName"]') || {}).value || '';
+    var partnerPhone = (this.querySelector('input[name="couplePartnerPhone"]') || {}).value || '';
+    var primaryName = (this.querySelector('input[name="entry.958957519"]') || {}).value || '';
+    var primaryPhone = (this.querySelector('input[name="entry.548335095"]') || {}).value || '';
+    var primaryEmail = (this.querySelector('input[name="entry.1422787791"]') || {}).value || '';
+    if (partnerName && partnerPhone && primaryName && primaryPhone) {
+      fetch('https://sapir-crm-system-production.up.railway.app/api/public/couple-split', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          primary: { name: primaryName, phone: primaryPhone, email: primaryEmail },
+          partner: { name: partnerName, phone: partnerPhone },
+          totalAmount: currentPrice || 350
+        })
+      }).then(function(r){return r.json()}).then(function(d){
+        if (d && d.success) {
+          showToast('✓ נשלחו 2 קישורי תשלום ב-WhatsApp לשני המשתתפים', 'success');
+        } else {
+          showToast('הטופס נשלח, אך יצירת קישורי הפיצול נכשלה. ספיר תיצור קשר.', 'error');
+        }
+      }).catch(function(){
+        showToast('הטופס נשלח, אך יצירת קישורי הפיצול נכשלה. ספיר תיצור קשר.', 'error');
+      });
+    }
+  }
   var t = document.getElementById('toast');
   t.textContent = '✓ הטופס נשלח בהצלחה!'; t.className = 'toast success show';
   setTimeout(function() { t.classList.remove('show'); }, 4000);
