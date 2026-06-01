@@ -24,7 +24,7 @@
 <body>
 <div class="hero"><div class="hero-pattern"></div><div class="hero-content"><img src="amazons-logo.jpg" alt="Amazons Logo" class="hero-logo"><div class="badge">הרשמה פתוחה</div><h1>הצטרפות למועדון</h1><p>טופס הרשמה, מידע בריאותי, הסכמה לתנאי הפעילות ובחירת חבילה.</p></div></div>
 <div class="progress-bar"><div class="progress-inner"><span class="progress-label">שלב <span id="stepNum">1</span>/6</span><div class="progress-steps"><div class="progress-step active" data-step="0"></div><div class="progress-step" data-step="1"></div><div class="progress-step" data-step="2"></div><div class="progress-step" data-step="3"></div><div class="progress-step" data-step="4"></div><div class="progress-step" data-step="5"></div></div></div></div>
-<form class="form-wrap" id="mainForm">
+<form class="form-wrap" id="mainForm" novalidate>
 
 <!-- 0: פרטים אישיים -->
 <div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel">תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז. (אופציונלי)" inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div></div>
@@ -154,23 +154,19 @@ document.querySelectorAll('[data-show]').forEach(function(r) {
   });
 });
 
-function buildPayLink(app, amount) {
-  // PayBox deeplink — opens PayBox app with Sapir as recipient + amount pre-filled. Works.
-  if (app === 'paybox') return 'https://payboxapp.page.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
-  // Bit is intentionally NOT here — bitpay.co.il/app/me/<phone>/<amount> doesn't
-  // pre-fill recipient/amount reliably. Bit is now handled via the iCount paypage
-  // (official PayMe-Bit integration), invoked on form submit.
-  return '#';
-}
-
 function attachPayAppListeners(radioGroup, box, btn, titleEl) {
   radioGroup.querySelectorAll('input[type=radio]').forEach(function(r) {
     r.addEventListener('change', function() {
       var app = r.dataset.app || 'none';
       if (app === 'paybox') {
-        btn.href = buildPayLink(app, currentPrice);
-        titleEl.textContent = '📲 שלמ/י דרך PayBox';
-        btn.textContent = 'פתח/י PayBox — ' + currentPrice.toLocaleString() + ' ₪ לספיר';
+        // PayBox: Firebase Dynamic Links was shut down by Google on 2025-08-25,
+        // so payboxapp.page.link/pay?phone=&amount= no longer pre-fills
+        // recipient/amount. Show manual instructions to the customer instead;
+        // she opens PayBox herself and sends to Sapir's phone.
+        btn.href = '#';
+        btn.style.pointerEvents = 'none';
+        titleEl.textContent = '💜 תשלום ב-PayBox';
+        btn.innerHTML = 'פתחי PayBox ושלחי <b>' + currentPrice.toLocaleString() + ' ₪</b><br>למספר <b>054-315-5130</b> (ספיר)';
         box.classList.add('show');
       } else {
         // CC / Bit / bank-standing-order: no in-form deeplink button — payment
