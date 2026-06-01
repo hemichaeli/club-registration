@@ -314,15 +314,41 @@ function clearAllErrors(form) {
   });
 }
 
+// Israeli ID checksum (Luhn-like, weights [1,2,1,2,...]).
+function isValidIsraeliId(id) {
+  id = String(id || '').replace(/\D/g, '');
+  if (id.length < 5 || id.length > 9) return false;
+  id = id.padStart(9, '0');
+  var sum = 0;
+  for (var i = 0; i < 9; i++) {
+    var num = parseInt(id[i], 10) * ((i % 2) + 1);
+    if (num > 9) num = (num % 10) + 1;
+    sum += num;
+  }
+  return sum % 10 === 0;
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email || '').trim());
+}
+
+function isValidIsraeliPhone(phone) {
+  var digits = String(phone || '').replace(/\D/g, '');
+  // Mobile: 10 digits starting 05X. Landline (less common for trainees): 9-10 digits.
+  return /^05\d{8}$/.test(digits) || /^0[2-9]\d{7,8}$/.test(digits);
+}
+
 function validateForm(form) {
   clearAllErrors(form);
   var firstError = null;
+  var firstErrorMsg = null;
   var seenRadioGroups = {};
 
   form.querySelectorAll('[required]').forEach(function(el) {
     if (el.offsetParent === null && el.type !== 'radio') return;
     var ok = true;
     var target = null;
+    var msg = null;
 
     if (el.type === 'radio') {
       if (seenRadioGroups[el.name]) return;
@@ -332,20 +358,38 @@ function validateForm(form) {
     } else if (el.type === 'checkbox') {
       ok = el.checked;
       if (!ok) target = el.closest('.check-option') || el.closest('.field');
+    } else if (el.type === 'email') {
+      ok = el.value && isValidEmail(el.value);
+      if (!ok) { target = el.closest('.field'); msg = el.value ? 'כתובת אימייל לא תקינה' : null; }
+    } else if (el.type === 'tel') {
+      ok = el.value && isValidIsraeliPhone(el.value);
+      if (!ok) { target = el.closest('.field'); msg = el.value ? 'מספר טלפון לא תקין (10 ספרות, מתחיל ב-05)' : null; }
     } else {
       ok = el.value && el.value.trim().length > 0;
       if (!ok) target = el.closest('.field');
     }
 
     if (!ok && target) {
+      if (!firstErrorMsg && msg) firstErrorMsg = msg;
       target.classList.add('error');
       if (!firstError) firstError = target;
     }
   });
 
+  // Optional: validate ID number if user filled it (it's not required, but
+  // if provided it must be a valid Israeli ID).
+  var idEl = form.querySelector('input[name="entry.842454738"]');
+  if (idEl && idEl.value && idEl.value.trim()) {
+    if (!isValidIsraeliId(idEl.value)) {
+      idEl.closest('.field').classList.add('error');
+      if (!firstError) firstError = idEl.closest('.field');
+      if (!firstErrorMsg) firstErrorMsg = 'תעודת זהות לא תקינה';
+    }
+  }
+
   if (firstError) {
     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('יש למלא את הטופס במלואו', 'error');
+    showToast(firstErrorMsg || 'יש למלא את הטופס במלואו', 'error');
     return false;
   }
   return true;
@@ -430,25 +474,35 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   var pkgCard = document.querySelector('.pkg-card.selected');
   var pkgName = pkgCard ? (pkgCard.querySelector('.pkg-name')||{}).textContent || '' : '';
 
-  if ((isCC || isBit) && traineeName && traineePhone && currentPrice > 0 && !(isCouple && coupleSplitEl && coupleSplitEl.value === 'split')) {
-    t.textContent = '⏳ מעבירה אותך לעמוד תשלום מאובטח...'; t.className = 'toast success show';
+  // Always call our backend so the trainee lands in Sapir's dashboard
+  // (the upsertTrainee step). For CC/Bit the backend also returns a
+  // sale_url that we redirect to; for cash/bank/PayBox/bank-SO the
+  // backend just registers and we show the confirm overlay below.
+  if (traineeName && traineePhone && !(isCouple && coupleSplitEl && coupleSplitEl.value === 'split')) {
+    if (isCC || isBit) {
+      t.textContent = '⏳ מעבירה אותך לעמוד תשלום מאובטח...'; t.className = 'toast success show';
+    }
     fetch('https://sapir-crm-system-production.up.railway.app/api/public/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: traineeName, phone: traineePhone, email: traineeEmail,
-        packageName: pkgName, amount: currentPrice, recurring: isRecurringCC,
+        packageName: pkgName, amount: currentPrice || 0,
+        recurring: isRecurringCC, paymentMethod: payMethod,
       })
     }).then(function(r){return r.json()}).then(function(d){
       if (d && d.success && d.payUrl) {
-        window.location.href = d.payUrl;
-      } else {
-        showToast('הטופס נשלח, אך יצירת עמוד התשלום נכשלה. ספיר תיצור קשר.', 'error');
+        window.location.href = d.payUrl; // CC/Bit → straight to iCount paypage
+      } else if (!(d && d.success)) {
+        // Backend registration failed — show non-fatal warning but still
+        // proceed with the confirm overlay so the user knows the form
+        // reached the Google Form fallback.
+        console.warn('[create-payment] backend registration not successful', d);
       }
-    }).catch(function(){
-      showToast('הטופס נשלח, אך יצירת עמוד התשלום נכשלה. ספיר תיצור קשר.', 'error');
+    }).catch(function(err){
+      console.warn('[create-payment] backend call failed', err);
     });
-    return;
+    if (isCC || isBit) return; // CC/Bit waits for redirect; nothing else to do here
   }
 
   // Build confirmation message based on payment method, then show a
