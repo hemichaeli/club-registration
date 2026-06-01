@@ -155,8 +155,11 @@ document.querySelectorAll('[data-show]').forEach(function(r) {
 });
 
 function buildPayLink(app, amount) {
-  if (app === 'bit') return 'https://www.bitpay.co.il/app/me/' + SAPIR_PHONE + '/' + amount;
+  // PayBox deeplink — opens PayBox app with Sapir as recipient + amount pre-filled. Works.
   if (app === 'paybox') return 'https://payboxapp.page.link/pay?phone=' + SAPIR_PHONE + '&amount=' + amount;
+  // Bit is intentionally NOT here — bitpay.co.il/app/me/<phone>/<amount> doesn't
+  // pre-fill recipient/amount reliably. Bit is now handled via the iCount paypage
+  // (official PayMe-Bit integration), invoked on form submit.
   return '#';
 }
 
@@ -164,12 +167,14 @@ function attachPayAppListeners(radioGroup, box, btn, titleEl) {
   radioGroup.querySelectorAll('input[type=radio]').forEach(function(r) {
     r.addEventListener('change', function() {
       var app = r.dataset.app || 'none';
-      if (app === 'bit' || app === 'paybox') {
+      if (app === 'paybox') {
         btn.href = buildPayLink(app, currentPrice);
-        titleEl.textContent = (app === 'bit' ? '📲 שלמ/י דרך Bit' : '📲 שלמ/י דרך PayBox');
-        btn.textContent = (app === 'bit' ? 'פתח/י Bit — ' : 'פתח/י PayBox — ') + currentPrice.toLocaleString() + ' ₪ לספיר';
+        titleEl.textContent = '📲 שלמ/י דרך PayBox';
+        btn.textContent = 'פתח/י PayBox — ' + currentPrice.toLocaleString() + ' ₪ לספיר';
         box.classList.add('show');
       } else {
+        // CC / Bit / bank-standing-order: no in-form deeplink button — payment
+        // page opens on form submit via /api/public/create-payment.
         box.classList.remove('show');
       }
     });
@@ -395,6 +400,44 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
     }
   }
   var t = document.getElementById('toast');
+
+  // CC / Bit → open iCount paypage immediately so the user can pay without
+  // waiting for the async WhatsApp. PayBox keeps its in-form deeplink button;
+  // bank-standing-order and cash fall through to the regular success toast.
+  var payMethodEl = this.querySelector('input[name="entry.324474069"]:checked')
+                 || this.querySelector('input[name="entry.646554335"]:checked')
+                 || this.querySelector('input[name="entry.1663473485"]:checked');
+  var payMethod = payMethodEl ? payMethodEl.value : '';
+  var isCC = payMethod.indexOf('כרטיס אשראי') !== -1;
+  var isRecurringCC = payMethod.indexOf('הוראת קבע בכרטיס אשראי') !== -1;
+  var isBit = payMethod.indexOf('ביט') !== -1 || payMethod.indexOf('Bit') !== -1;
+  var traineeName = (this.querySelector('input[name="entry.958957519"]') || {}).value || '';
+  var traineePhone = (this.querySelector('input[name="entry.548335095"]') || {}).value || '';
+  var traineeEmail = (this.querySelector('input[name="entry.1422787791"]') || {}).value || '';
+  var pkgCard = document.querySelector('.pkg-card.selected');
+  var pkgName = pkgCard ? (pkgCard.querySelector('.pkg-name')||{}).textContent || '' : '';
+
+  if ((isCC || isBit) && traineeName && traineePhone && currentPrice > 0 && !(isCouple && coupleSplitEl && coupleSplitEl.value === 'split')) {
+    t.textContent = '⏳ מעבירה אותך לעמוד תשלום מאובטח...'; t.className = 'toast success show';
+    fetch('https://sapir-crm-system-production.up.railway.app/api/public/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: traineeName, phone: traineePhone, email: traineeEmail,
+        packageName: pkgName, amount: currentPrice, recurring: isRecurringCC,
+      })
+    }).then(function(r){return r.json()}).then(function(d){
+      if (d && d.success && d.payUrl) {
+        window.location.href = d.payUrl;
+      } else {
+        showToast('הטופס נשלח, אך יצירת עמוד התשלום נכשלה. ספיר תיצור קשר.', 'error');
+      }
+    }).catch(function(){
+      showToast('הטופס נשלח, אך יצירת עמוד התשלום נכשלה. ספיר תיצור קשר.', 'error');
+    });
+    return;
+  }
+
   t.textContent = '✓ הטופס נשלח בהצלחה!'; t.className = 'toast success show';
   setTimeout(function() { t.classList.remove('show'); }, 4000);
   var self = this;
