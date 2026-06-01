@@ -9,7 +9,15 @@
 .pay-app-box{display:none;margin-top:14px;background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(46,204,113,.02));border:1px solid rgba(46,204,113,.25);border-radius:12px;padding:16px 18px}
 .pay-app-box.show{display:block}
 .pay-app-box .pa-title{font-size:13px;font-weight:700;color:var(--success);margin-bottom:4px}
-.pay-app-box .pa-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.pay-app-box .pa-sub{font-size:13px;color:var(--text);margin-bottom:12px;line-height:1.6}
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.confirm-overlay.show{display:flex}
+.confirm-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:480px;width:100%;text-align:center}
+.confirm-card .ico{font-size:48px;margin-bottom:12px}
+.confirm-card h2{font-family:'Rubik',sans-serif;font-size:22px;color:var(--success);margin-bottom:12px}
+.confirm-card .msg{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:20px;text-align:right}
+.confirm-card .msg b{color:var(--gold)}
+.confirm-card .btn-close{background:var(--accent);color:#fff;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;padding:12px 32px;border:none;border-radius:10px;cursor:pointer}
 .btn-pay-app{display:inline-flex;align-items:center;gap:8px;background:var(--success);color:#fff;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;transition:opacity .2s}
 .btn-pay-app:hover{opacity:.88}
 .field.error label.flabel{color:var(--accent2)}
@@ -114,6 +122,14 @@
 <p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח</p>
 </form>
 <div class="toast" id="toast"></div>
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <div class="ico">✅</div>
+    <h2>הטופס נשלח בהצלחה</h2>
+    <div class="msg" id="confirmMsg"></div>
+    <button class="btn-close" onclick="document.getElementById('confirmOverlay').classList.remove('show'); document.getElementById('mainForm').reset(); currentPrice = 0; document.querySelectorAll('.pkg-card').forEach(function(c){c.classList.remove('selected')}); document.getElementById('priceDisplay').style.display = 'none'; document.querySelectorAll('.conditional').forEach(function(c){c.classList.remove('show')}); document.querySelectorAll('.pay-section').forEach(function(s){s.classList.remove('show')}); document.querySelectorAll('.pay-app-box').forEach(function(b){b.classList.remove('show')}); window.scrollTo({top:0,behavior:'smooth'});">סגירה</button>
+  </div>
+</div>
 
 <script>
 var F = 'https://docs.google.com/forms/d/1wzjMttgoxSwzlg0zWMcudmr_80KtNEC1VppeHQL88tA/formResponse';
@@ -161,16 +177,17 @@ function attachPayAppListeners(radioGroup, box, btn, titleEl) {
       if (app === 'paybox') {
         // PayBox: Firebase Dynamic Links was shut down by Google on 2025-08-25,
         // so payboxapp.page.link/pay?phone=&amount= no longer pre-fills
-        // recipient/amount. Show manual instructions to the customer instead;
-        // she opens PayBox herself and sends to Sapir's phone.
-        btn.href = '#';
-        btn.style.pointerEvents = 'none';
-        titleEl.textContent = '💜 תשלום ב-PayBox';
-        btn.innerHTML = 'פתחי PayBox ושלחי <b>' + currentPrice.toLocaleString() + ' ₪</b><br>למספר <b>054-315-5130</b> (ספיר)';
+        // recipient/amount. Show manual instructions in the box's subtitle
+        // (no clickable button — paying happens inside the PayBox app itself).
+        titleEl.textContent = '💜 לתשלום ב-PayBox';
+        var sub = box.querySelector('.pa-sub');
+        if (sub) sub.innerHTML = 'פתחי את אפליקציית PayBox ושלחי <b>' + currentPrice.toLocaleString() + ' ₪</b> למספר <b>054-315-5130</b> (ספיר). אחרי השליחה, לחצי "שליחת הטופס" למטה כדי שספיר תקבל את הפרטים שלך.';
+        btn.style.display = 'none';
         box.classList.add('show');
       } else {
         // CC / Bit / bank-standing-order: no in-form deeplink button — payment
         // page opens on form submit via /api/public/create-payment.
+        btn.style.display = '';
         box.classList.remove('show');
       }
     });
@@ -434,21 +451,30 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
     return;
   }
 
-  t.textContent = '✓ הטופס נשלח בהצלחה!'; t.className = 'toast success show';
-  setTimeout(function() { t.classList.remove('show'); }, 4000);
-  var self = this;
-  setTimeout(function() {
-    self.reset(); currentPrice = 0;
-    document.querySelectorAll('.pkg-card').forEach(function(c) { c.classList.remove('selected'); });
-    document.getElementById('priceDisplay').style.display = 'none';
-    document.querySelectorAll('.conditional').forEach(function(c) { c.classList.remove('show'); });
-    document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
-    document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
-    loadPackages();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    btn.disabled = false;
-    btn.innerHTML = 'שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-  }, 1500);
+  // Build confirmation message based on payment method, then show a
+  // persistent overlay (instead of silently clearing the form after 1.5s,
+  // which left users staring at an empty form wondering if the submit
+  // even worked, especially for PayBox where they still need to pay).
+  var confirmMsg;
+  var isPayBox = payMethod.indexOf('PayBox') !== -1 || payMethod.indexOf('פייבוקס') !== -1;
+  var isBankSO = payMethod.indexOf('הוראת קבע בנקאית') !== -1;
+  var isCash = payMethod.indexOf('מזומן') !== -1;
+  var isTransfer = payMethod.indexOf('העברה בנקאית') !== -1;
+  if (isPayBox) {
+    confirmMsg = 'הפרטים שלך נשלחו לספיר. כדי להשלים את התשלום:<br><br>1. פתחי את אפליקציית <b>PayBox</b><br>2. שלחי <b>' + currentPrice.toLocaleString() + ' ₪</b><br>3. למספר <b>054-315-5130</b> (ספיר)<br><br>ספיר תאשר את התשלום ידנית כשיגיע.';
+  } else if (isBankSO) {
+    confirmMsg = 'הפרטים שלך נשלחו לספיר. ספיר תיצור איתך קשר לפרטי חשבון לפתיחת הוראת קבע בנקאית.';
+  } else if (isCash) {
+    confirmMsg = 'הפרטים שלך נשלחו לספיר. את התשלום של <b>' + currentPrice.toLocaleString() + ' ₪</b> תוכלי להעביר בפגישה הראשונה.';
+  } else if (isTransfer) {
+    confirmMsg = 'הפרטים שלך נשלחו לספיר. ספיר תיצור איתך קשר לפרטי חשבון לביצוע ההעברה הבנקאית.';
+  } else {
+    confirmMsg = 'הפרטים שלך נשלחו לספיר. היא תיצור איתך קשר לפרטי תשלום.';
+  }
+  document.getElementById('confirmMsg').innerHTML = confirmMsg;
+  document.getElementById('confirmOverlay').classList.add('show');
+  btn.disabled = false;
+  btn.innerHTML = 'שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 });
 </script>
 </body>
