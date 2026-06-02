@@ -118,6 +118,31 @@
 <label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בנקאית"><span class="dot"></span> הוראת קבע בנקאית</label>
 </div></div></div>
 
+<!-- Bank picker — shown only when 'הוראת קבע בנקאית' is selected.
+     Required, so users can't submit without choosing their bank; on submit
+     the bank's online-banking URL is opened so they can set up the actual
+     standing order from their account to Sapir's Discount account. -->
+<div class="section" id="bankPickerSection" style="display:none">
+  <div class="section-header"><div class="section-icon orange">🏦</div><h2>באיזה בנק החשבון שלך?</h2></div>
+  <p class="sub">בחר/י את הבנק שלך כדי שנעביר אותך ישירות לדף הקמת הוראת הקבע אצלם.</p>
+  <div class="field">
+    <select id="bankSelect" style="width:100%;padding:14px;border-radius:10px;border:1px solid #d0d0d0;font-size:16px;background:#fff;direction:rtl">
+      <option value="">-- בחר/י בנק --</option>
+      <option value="leumi" data-url="https://hb2.bankleumi.co.il/">בנק לאומי</option>
+      <option value="hapoalim" data-url="https://login.bankhapoalim.co.il/">בנק הפועלים</option>
+      <option value="discount" data-url="https://start.telebank.co.il/login/">בנק דיסקונט</option>
+      <option value="mizrahi" data-url="https://www.mizrahi-tefahot.co.il/login/">מזרחי-טפחות</option>
+      <option value="fibi" data-url="https://online.fibi.co.il/">הבינלאומי הראשון (FIBI)</option>
+      <option value="mercantile" data-url="https://login.mercantile.co.il/">מרכנתיל</option>
+      <option value="massad" data-url="https://login.bank-massad.co.il/">מסד</option>
+      <option value="yahav" data-url="https://www.bank-yahav.co.il/">יהב</option>
+      <option value="pagi" data-url="https://www.pagi.co.il/">פאג"י</option>
+      <option value="postalbank" data-url="https://www.israelpost.co.il/">דואר ישראל / בנק הדואר</option>
+      <option value="other" data-url="">בנק אחר</option>
+    </select>
+  </div>
+</div>
+
 <div class="submit-section"><button type="submit" class="btn-submit" id="submitBtn">שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
 <p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח</p>
 </form>
@@ -400,11 +425,43 @@ document.getElementById('mainForm').addEventListener('change', function(e) {
   if (t) t.classList.remove('error');
   var sec = e.target.closest('.section');
   if (sec) sec.classList.remove('error');
+  // Bank standing order: reveal the bank-picker step when chosen.
+  if (e.target.type === 'radio' && (e.target.name === 'entry.646554335' || e.target.name === 'entry.1663473485')) {
+    var isBankSOPick = e.target.value.indexOf('הוראת קבע בנקאית') !== -1;
+    var picker = document.getElementById('bankPickerSection');
+    if (picker) picker.style.display = isBankSOPick ? 'block' : 'none';
+    if (isBankSOPick) {
+      // Scroll into view so the user notices the new required field.
+      setTimeout(function(){ picker.scrollIntoView({behavior:'smooth', block:'center'}); }, 100);
+    }
+  }
 });
 
 document.getElementById('mainForm').addEventListener('submit', function(e) {
   e.preventDefault();
   if (!validateForm(this)) return;
+  // If bank standing order was chosen, require a bank pick AND remember it
+  // so the confirmation modal can deep-link to the right online portal.
+  var payRadio = this.querySelector('input[name="entry.646554335"]:checked')
+              || this.querySelector('input[name="entry.1663473485"]:checked');
+  var payVal = payRadio ? payRadio.value : '';
+  if (payVal.indexOf('הוראת קבע בנקאית') !== -1) {
+    var bankSel = document.getElementById('bankSelect');
+    if (!bankSel || !bankSel.value) {
+      var picker = document.getElementById('bankPickerSection');
+      if (picker) {
+        picker.classList.add('error');
+        picker.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+      alert('בחר/י את הבנק שלך כדי שנעביר אותך לדף הקמת הוראת הקבע.');
+      return;
+    }
+    var opt = bankSel.options[bankSel.selectedIndex];
+    window._chosenBankLabel = opt.text;
+    window._chosenBankUrl = opt.getAttribute('data-url') || '';
+    // Augment paymentMethod so Sapir sees the bank in the dashboard row.
+    payRadio.value = 'הוראת קבע בנקאית - ' + opt.text;
+  }
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'שולח...';
@@ -517,7 +574,22 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   if (isPayBox) {
     confirmMsg = 'הפרטים שלך נשלחו לספיר. כדי להשלים את התשלום:<br><br>1. פתחי את אפליקציית <b>PayBox</b><br>2. שלחי <b>' + currentPrice.toLocaleString() + ' ₪</b><br>3. למספר <b>054-315-5130</b> (ספיר)<br><br>ספיר תאשר את התשלום ידנית כשיגיע.';
   } else if (isBankSO) {
-    confirmMsg = 'הפרטים שלך נשלחו לספיר. ספיר תיצור איתך קשר לפרטי חשבון לפתיחת הוראת קבע בנקאית.';
+    var bankLabel = (window._chosenBankLabel || '');
+    var bankUrl = (window._chosenBankUrl || '');
+    var bankLine = bankLabel ? ('<br><b>הבנק שלך: ' + bankLabel + '</b>') : '';
+    var portalBtn = bankUrl
+      ? '<br><br><a href="' + bankUrl + '" target="_blank" rel="noopener" style="display:inline-block;background:#ff6b35;color:#fff;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:15px">פתח/י את הבנקאות המקוונת ←</a>'
+      : '<br><br><span style="color:#94a3b8">(לבנק שלך אין דף ייעודי - התחבר/י באפליקציה או באתר של הבנק)</span>';
+    confirmMsg =
+      'הפרטים שלך נשלחו לספיר.' + bankLine +
+      '<br><br><b>פרטי החשבון של ספיר להקמת הוראת הקבע:</b><br>' +
+      '• בנק: <b>דיסקונט (11)</b><br>' +
+      '• סניף: <b>096</b><br>' +
+      '• מספר חשבון: <b>089335157</b><br>' +
+      '• שם: <b>ספיר סיפורן</b><br>' +
+      '• סכום חודשי: <b>' + (currentPrice ? currentPrice.toLocaleString() + ' ₪' : 'לפי המנוי שבחרת') + '</b>' +
+      portalBtn +
+      '<br><br><span style="color:#94a3b8;font-size:13px">אם תיתקל/י בקושי בהקמת ההוראה - ספיר תיצור איתך קשר.</span>';
   } else if (isCash) {
     confirmMsg = 'הפרטים שלך נשלחו לספיר. את התשלום של <b>' + currentPrice.toLocaleString() + ' ₪</b> תוכלי להעביר בפגישה הראשונה.';
   } else if (isTransfer) {
