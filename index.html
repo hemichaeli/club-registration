@@ -34,6 +34,14 @@
 <div class="progress-bar"><div class="progress-inner"><span class="progress-label">שלב <span id="stepNum">1</span>/6</span><div class="progress-steps"><div class="progress-step active" data-step="0"></div><div class="progress-step" data-step="1"></div><div class="progress-step" data-step="2"></div><div class="progress-step" data-step="3"></div><div class="progress-step" data-step="4"></div><div class="progress-step" data-step="5"></div></div></div></div>
 <form class="form-wrap" id="mainForm" novalidate>
 
+<!-- Returning-customer banner (shown when phone/ID matches an existing trainee) -->
+<div id="returnBanner" style="display:none;margin:0 0 18px;padding:16px 18px;background:linear-gradient(135deg,rgba(46,204,113,.14),rgba(212,168,83,.10));border:1px solid rgba(46,204,113,.4);border-radius:14px">
+  <div style="font-weight:700;font-size:16px;margin-bottom:4px;color:#2ecc71">👋 <span id="returnName">ברוכה השבה!</span></div>
+  <div style="color:#b8b8c0;font-size:13.5px;line-height:1.6;margin-bottom:12px">זיהינו שאת כבר רשומה אצלנו — אפשר לדלג ישר לבחירת החבילה והתשלום, בלי למלא את כל הטופס שוב.</div>
+  <button type="button" id="returnSkipBtn" style="background:#2ecc71;color:#06210f;border:0;border-radius:10px;padding:11px 22px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">דלגי לבחירת חבילה ותשלום ←</button>
+  <button type="button" id="returnDismissBtn" style="background:transparent;color:#8a8a9a;border:0;padding:11px 10px;font-size:13px;cursor:pointer;font-family:inherit">לא, אמלא מחדש</button>
+</div>
+
 <!-- 0: פרטים אישיים -->
 <div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel">תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז. (אופציונלי)" inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div></div>
 
@@ -528,6 +536,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   var traineeName = (this.querySelector('input[name="entry.958957519"]') || {}).value || '';
   var traineePhone = (this.querySelector('input[name="entry.548335095"]') || {}).value || '';
   var traineeEmail = (this.querySelector('input[name="entry.1422787791"]') || {}).value || '';
+  var traineeId = (this.querySelector('input[name="entry.842454738"]') || {}).value || '';
   var pkgCard = document.querySelector('.pkg-card.selected');
   var pkgName = pkgCard ? (pkgCard.querySelector('.pkg-name')||{}).textContent || '' : '';
 
@@ -544,6 +553,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: traineeName, phone: traineePhone, email: traineeEmail,
+        idNumber: traineeId,
         packageName: pkgName, amount: currentPrice || 0,
         recurring: isRecurringCC, paymentMethod: payMethod,
       })
@@ -602,6 +612,62 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   btn.disabled = false;
   btn.innerHTML = 'שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 });
+</script>
+<script>
+/* Returning-customer recognition: when a valid phone (or ת"ז) is entered, ask
+   the backend if this person already exists. If so, show a banner letting them
+   skip the questionnaire and go straight to package + payment. */
+(function(){
+  var LOOKUP = 'https://sapir-crm-system-production.up.railway.app/api/public/lookup';
+  var phoneEl = document.querySelector('input[name="entry.548335095"]');
+  var idEl = document.querySelector('input[name="entry.842454738"]');
+  var nameEl = document.querySelector('input[name="entry.958957519"]');
+  var emailEl = document.querySelector('input[name="entry.1422787791"]');
+  var banner = document.getElementById('returnBanner');
+  var nameSpan = document.getElementById('returnName');
+  var skipBtn = document.getElementById('returnSkipBtn');
+  var dismissBtn = document.getElementById('returnDismissBtn');
+  if (!phoneEl || !banner) return;
+  var dismissed = false, lastQuery = '', matched = null;
+
+  function digits(s){ return String(s||'').replace(/\D/g,''); }
+
+  function doLookup(){
+    if (dismissed) return;
+    var phone = digits(phoneEl.value);
+    var id = idEl ? digits(idEl.value) : '';
+    if (phone.length < 9 && id.length < 5) return;        // not enough to match
+    var q = phone + '|' + id;
+    if (q === lastQuery) return;                           // avoid repeats
+    lastQuery = q;
+    var url = LOOKUP + '?phone=' + encodeURIComponent(phone) + '&idNumber=' + encodeURIComponent(id);
+    fetch(url).then(function(r){return r.json()}).then(function(d){
+      if (d && d.found && d.trainee) {
+        matched = d.trainee;
+        nameSpan.textContent = 'ברוכה השבה' + (matched.firstName ? ', ' + matched.firstName : '') + '!';
+        banner.style.display = 'block';
+      }
+    }).catch(function(){});
+  }
+
+  phoneEl.addEventListener('blur', doLookup);
+  if (idEl) idEl.addEventListener('blur', doLookup);
+
+  skipBtn && skipBtn.addEventListener('click', function(){
+    // Prefill name/email from the match if the fields are empty, then jump to packages.
+    if (matched) {
+      if (nameEl && !nameEl.value && matched.name) nameEl.value = matched.name;
+      if (emailEl && !emailEl.value && matched.email) emailEl.value = matched.email;
+    }
+    var grid = document.getElementById('pkgGrid');
+    if (grid && grid.scrollIntoView) grid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    banner.style.display = 'none';
+  });
+
+  dismissBtn && dismissBtn.addEventListener('click', function(){
+    dismissed = true; banner.style.display = 'none';
+  });
+})();
 </script>
 </body>
 </html>
