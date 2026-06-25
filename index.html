@@ -543,13 +543,27 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
     fetch('https://sapir-crm-system-production.up.railway.app/api/public/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: traineeName, phone: traineePhone, email: traineeEmail,
-        idNumber: traineeId,
-        packageName: pkgName, amount: currentPrice || 0,
-        recurring: isRecurringCC, paymentMethod: payMethod,
-        parentName: (document.getElementById('parentNameInput') || {}).value || '',
-      })
+      body: (function(){
+        var f = document.getElementById('mainForm');
+        var pick = function(n){ var el = f.querySelector('input[name="'+n+'"]:checked'); return el ? el.value : ''; };
+        var pickText = function(n){ var el = f.querySelector('input[name="'+n+'"], textarea[name="'+n+'"]'); return el ? el.value : ''; };
+        var dobIso = (document.getElementById('dobInput') || {}).value || '';
+        var dobHe  = dobIso ? dobIso.split('-').reverse().join('/') : '';
+        var waiver = (f.querySelector('input[name="entry.4242155"]:checked')||{}).value || (f.querySelector('input[name="entry.4242155"]')?'אישר/ה':'');
+        return JSON.stringify({
+          name: traineeName, phone: traineePhone, email: traineeEmail,
+          idNumber: traineeId, birthDate: dobHe,
+          packageName: pkgName, amount: currentPrice || 0,
+          recurring: isRecurringCC, paymentMethod: payMethod,
+          parentName: (document.getElementById('parentNameInput') || {}).value || '',
+          medicalCondition: (function(){ var v=pick('entry.30320603'); return v==='לא'?'':((document.getElementById('medicalConditionDetailText')||{}).value||v); })(),
+          injuries: pick('entry.297649418')==='כן'?'כן':'',
+          medications: (function(){ var v=pick('entry.1333852355'); return v==='לא'?'':((document.getElementById('medsDetailText')||{}).value||v); })(),
+          martialArtsExperience: pick('entry.881347051'),
+          movementLimitations: (function(){ var v=pick('entry.1242812668'); return v==='לא'?'':(pickText('entry.1447318397')||v); })(),
+          waiverSigned: !!(f.querySelector('input[name="entry.4242155"]:checked')),
+        });
+      })()
     }).then(function(r){return r.json()}).then(function(d){
       if (d && d.success && d.payUrl) {
         window.location.href = d.payUrl; // CC/Bit → straight to iCount paypage
