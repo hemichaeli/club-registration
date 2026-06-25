@@ -109,7 +109,7 @@
 <label class="radio-option" id="bitOption"><input type="radio" name="entry.646554335" value="ביט - Bit" data-app="bit"><span class="dot"></span> Bit - ביט</label>
 <label class="radio-option"><input type="radio" name="entry.646554335" value="העברה בנקאית" data-app="none"><span class="dot"></span> העברה בנקאית</label>
 <label class="radio-option"><input type="radio" name="entry.646554335" value="מזומן" data-app="none"><span class="dot"></span> מזומן</label>
-<label class="radio-option"><input type="radio" name="entry.646554335" value="הוראת קבע בנקאית" data-app="none"><span class="dot"></span> הוראת קבע בנקאית</label>
+<!-- Bank standing-order removed 2026-06-25 per Sapir — manual setup at the customer's bank was confusing and led to incomplete signups (חביאר case). All standing orders now go through CC HK via iCount. -->
 </div></div>
 <div class="pay-app-box" id="appBoxMonthly">
   <div class="pa-title" id="appBoxMonthlyTitle">📲 פתח/י את האפליקציה לתשלום</div>
@@ -123,33 +123,9 @@
 <div class="section-header"><div class="section-icon orange">&#x1F4B3;</div><h2>אופן תשלום</h2></div><p class="sub">בחר/י את אמצעי התשלום המועדף</p>
 <div class="field"><div class="radio-group">
 <label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בכרטיס אשראי – חיוב חודשי אוטומטי"><span class="dot"></span> הוראת קבע באשראי - חודשי</label>
-<label class="radio-option"><input type="radio" name="entry.1663473485" value="הוראת קבע בנקאית"><span class="dot"></span> הוראת קבע בנקאית</label>
+<!-- Bank standing-order removed 2026-06-25 — see comment above -->
 </div></div></div>
 
-<!-- Bank picker — shown only when 'הוראת קבע בנקאית' is selected.
-     Required, so users can't submit without choosing their bank; on submit
-     the bank's online-banking URL is opened so they can set up the actual
-     standing order from their account to Sapir's Discount account. -->
-<div class="section" id="bankPickerSection" style="display:none">
-  <div class="section-header"><div class="section-icon orange">🏦</div><h2>באיזה בנק החשבון שלך?</h2></div>
-  <p class="sub">בחר/י את הבנק שלך כדי שנעביר אותך ישירות לדף הקמת הוראת הקבע אצלם.</p>
-  <div class="field">
-    <select id="bankSelect" style="width:100%;padding:14px;border-radius:10px;border:1px solid #d0d0d0;font-size:16px;background:#fff;direction:rtl">
-      <option value="">-- בחר/י בנק --</option>
-      <option value="leumi" data-url="https://hb2.bankleumi.co.il/">בנק לאומי</option>
-      <option value="hapoalim" data-url="https://login.bankhapoalim.co.il/">בנק הפועלים</option>
-      <option value="discount" data-url="https://start.telebank.co.il/login/">בנק דיסקונט</option>
-      <option value="mizrahi" data-url="https://www.mizrahi-tefahot.co.il/login/">מזרחי-טפחות</option>
-      <option value="fibi" data-url="https://online.fibi.co.il/">הבינלאומי הראשון (FIBI)</option>
-      <option value="mercantile" data-url="https://login.mercantile.co.il/">מרכנתיל</option>
-      <option value="massad" data-url="https://login.bank-massad.co.il/">מסד</option>
-      <option value="yahav" data-url="https://www.bank-yahav.co.il/">יהב</option>
-      <option value="pagi" data-url="https://www.pagi.co.il/">פאג"י</option>
-      <option value="postalbank" data-url="https://www.israelpost.co.il/">דואר ישראל / בנק הדואר</option>
-      <option value="other" data-url="">בנק אחר</option>
-    </select>
-  </div>
-</div>
 
 <div class="submit-section"><button type="submit" class="btn-submit" id="submitBtn">שליחת הטופס <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
 <p class="footer-note">הנתונים נשלחים ישירות לטופס הרישום המאובטח</p>
