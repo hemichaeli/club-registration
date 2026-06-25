@@ -43,7 +43,7 @@
 </div>
 
 <!-- 0: פרטים אישיים -->
-<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel">תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז. (אופציונלי)" inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div></div>
+<div class="section" data-sec="0"><div class="section-header"><div class="section-icon red">&#x1F464;</div><h2>פרטים אישיים</h2></div><p class="sub">מידע בסיסי לצורך רישום</p><div class="field"><label class="flabel"><span class="req">*</span> שם + שם משפחה</label><input type="text" name="entry.958957519" placeholder="הכנס/י שם מלא" required></div><div class="row"><div class="field"><label class="flabel">תעודת זהות</label><input type="text" name="entry.842454738" placeholder="מספר ת.ז. (אופציונלי)" inputmode="numeric"></div><div class="field"><label class="flabel"><span class="req">*</span> מספר טלפון</label><input type="tel" name="entry.548335095" placeholder="050-0000000" required></div></div><div class="row"><div class="field"><label class="flabel"><span class="req">*</span> תאריך לידה</label><input type="date" id="dobInput" required></div><div class="field"><label class="flabel"><span class="req">*</span> כתובת אימייל</label><input type="email" name="entry.1422787791" placeholder="email@example.com" required></div></div><div class="conditional" id="kidsParentSection"><label class="flabel"><span class="req">*</span> שם ההורה / האפוטרופוס</label><input type="text" id="parentNameInput" name="parentName" placeholder="שם מלא של ההורה (חובה לקבוצת ילדים/נוער)"><p class="sub" style="margin-top:6px;font-size:12px">נדרש כדי שספיר תוכל ליצור איתך קשר בנושאי המתאמן/ת.</p></div></div>
 
 <!-- 1: מידע בריאותי -->
 <div class="section" data-sec="1"><div class="section-header"><div class="section-icon gold">&#x1F3E5;</div><h2>מידע בריאותי</h2></div><p class="sub">חיוני לבטיחותך באימונים</p><div class="field"><label class="flabel"><span class="req">*</span> בעיה רפואית שמונעת פעילות גופנית?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.30320603" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.30320603" value="כן" data-show="medicalConditionDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.30320603" value="אולי" data-show="medicalConditionDetail"><span class="dot"></span> אולי</label></div><div class="conditional" id="medicalConditionDetail"><label class="flabel">פרטים על הבעיה הרפואית (אופציונלי)</label><textarea id="medicalConditionDetailText" placeholder="לדוגמה: אסטמה, סוכרת, לחץ דם..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> פציעות בגב, ברכיים או מפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.297649418" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.297649418" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> נוטל/ת תרופות באופן קבוע?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1333852355" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="כן" data-show="medsDetail"><span class="dot"></span> כן</label><label class="radio-option"><input type="radio" name="entry.1333852355" value="לעיתים" data-show="medsDetail"><span class="dot"></span> לעיתים</label></div><div class="conditional" id="medsDetail"><label class="flabel">פרטי התרופות (אופציונלי)</label><textarea id="medsDetailText" placeholder="שם התרופה ומינון..."></textarea></div></div><div class="field"><label class="flabel"><span class="req">*</span> ניסיון באומנויות לחימה?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.881347051" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.881347051" value="כן"><span class="dot"></span> כן</label></div></div><div class="field"><label class="flabel"><span class="req">*</span> מגבלות תנועה או כאבים במפרקים?</label><div class="radio-group inline"><label class="radio-option"><input type="radio" name="entry.1242812668" value="לא" required><span class="dot"></span> לא</label><label class="radio-option"><input type="radio" name="entry.1242812668" value="כן" data-show="mobilityDetail"><span class="dot"></span> כן</label></div><div class="conditional" id="mobilityDetail"><label class="flabel">פרטי המגבלה (אופציונלי)</label><textarea name="entry.1447318397" placeholder="תאר/י את המגבלות..."></textarea></div></div></div>
@@ -278,6 +278,20 @@ function attachPkgHandlers() {
         couplePartnerFields.classList.remove('show');
         document.querySelectorAll('input[name="coupleSplit"]').forEach(function(r) { r.checked = false; });
       }
+      // Kids/teens group: parent name becomes a required field.
+      var isKids = c.dataset.kids === '1';
+      var kidsSec = document.getElementById('kidsParentSection');
+      var parentInput = document.getElementById('parentNameInput');
+      if (kidsSec && parentInput) {
+        if (isKids) {
+          kidsSec.classList.add('show');
+          parentInput.required = true;
+        } else {
+          kidsSec.classList.remove('show');
+          parentInput.required = false;
+          parentInput.value = '';
+        }
+      }
       if (cat === 'onetime') {
         document.getElementById('payOnetime').classList.add('show');
         document.querySelector('#payOnetime input[type=radio]').required = true;
@@ -306,7 +320,9 @@ function renderPackages(packages) {
       ? '<s style="font-size:12px;color:var(--muted)">' + origP.toLocaleString() + ' ₪</s><div class="pkg-price">' + saleP.toLocaleString() + ' ₪</div>'
       : '<div class="pkg-price">' + origP.toLocaleString() + ' ₪</div>';
     var isCouple = /אימון זוגי/.test(pkg.name) ? '1' : '';
-    return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '" data-couple="' + isCouple + '">'
+    // Kids/teens group needs parent contact captured at signup.
+    var isKids = /בנות\s*\/\s*בנים|ילד|נוער|teens|kids/i.test(pkg.name) ? '1' : '';
+    return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '" data-couple="' + isCouple + '" data-kids="' + isKids + '">'
       + '<input type="radio" name="entry.729039732" value="' + formVal + '">'
       + '<div class="pkg-check"></div>'
       + '<div class="pkg-name">' + esc(pkg.name) + '</div>'
@@ -556,6 +572,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
         idNumber: traineeId,
         packageName: pkgName, amount: currentPrice || 0,
         recurring: isRecurringCC, paymentMethod: payMethod,
+        parentName: (document.getElementById('parentNameInput') || {}).value || '',
       })
     }).then(function(r){return r.json()}).then(function(d){
       if (d && d.success && d.payUrl) {
