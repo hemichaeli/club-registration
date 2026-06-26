@@ -64,6 +64,11 @@
   <div class="price-display" id="priceDisplay" style="display:none">
     <div class="amount" id="priceAmount"></div>
     <div class="plabel" id="priceLabel">מחיר</div>
+    <div id="recurringNote" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(212,168,83,.08);border:1px solid rgba(212,168,83,.3);border-radius:8px;font-size:12px;color:var(--text);line-height:1.6;text-align:right">
+      🔔 <b>מנוי חודשי מתחדש</b><br>
+      החיוב יחזור על עצמו בכל 1 לחודש באופן אוטומטי.<br>
+      בסוף כל חודש תקבל/י הודעת תזכורת ב-WhatsApp עם לינק לביטול, אם תרצי/תרצה לעצור.
+    </div>
   </div>
   <div class="conditional" id="couplePartner">
     <div class="field" style="margin-bottom:12px;">
@@ -241,6 +246,9 @@ function attachPkgHandlers() {
       var cat = c.dataset.cat;
       var periodLabel = { onetime: 'תשלום חד פעמי', monthly: 'מחיר חודשי', group: 'מחיר חודשי', sub: 'מחיר חודשי (הוראת קבע)' };
       document.getElementById('priceLabel').textContent = periodLabel[cat] || 'מחיר';
+      // Show "מנוי מתחדש" disclosure when a recurring package is selected.
+      var note = document.getElementById('recurringNote');
+      if (note) note.style.display = (cat === 'monthly' || cat === 'sub') ? 'block' : 'none';
       document.querySelectorAll('.pay-section input[type=radio]').forEach(function(r) { r.checked = false; r.required = false; });
       document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
       document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
@@ -316,8 +324,8 @@ function loadPackages() {
         { name: 'שיעור ניסיון בקבוצה', price: '100', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון אישי 1:1', price: '300', period: 'חד פעמי', paymentType: 'one_time' },
         { name: 'אימון זוגי', price: '350', period: 'חד פעמי', paymentType: 'one_time' },
-        { name: 'חבילת 4 אימונים פרטיים/אישיים - מנוי חודשי', price: '1200', period: 'חודשי', paymentType: 'recurring' },
-        { name: 'חבילת 8 אימונים פרטיים/אישיים - מנוי חודשי', price: '2400', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'חבילת 4 אימונים פרטיים/אישיים, מנוי חודשי מתחדש', price: '1200', period: 'חודשי', paymentType: 'recurring' },
+        { name: 'חבילת 8 אימונים פרטיים/אישיים, מנוי חודשי מתחדש', price: '2400', period: 'חודשי', paymentType: 'recurring' },
         { name: 'קבוצת נשים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' },
         { name: 'קבוצת גברים - מנוי חודשי', price: '350', period: 'חודשי', paymentType: 'recurring' },
         { name: 'קבוצת בנות / בנים - מנוי חודשי', price: '400', period: 'חודשי', paymentType: 'recurring' }
