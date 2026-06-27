@@ -67,7 +67,7 @@
 <!-- 4: בחירת חבילה -->
 <div class="section" data-sec="4">
   <div class="section-header"><div class="section-icon purple">&#x1F4E6;</div><h2>בחירת חבילה</h2></div>
-  <p class="sub">בחר/י את החבילה המתאימה</p>
+  <p class="sub">בחר/י חבילה אחת או יותר (לדוגמה: אימון אישי + קבוצה). אין לשלב חבילה חד-פעמית עם מנוי חודשי.</p>
   <div class="pkg-grid" id="pkgGrid">
     <div class="pkg-loading">טוען חבילות...</div>
   </div>
@@ -242,63 +242,110 @@ function getPkgCat(pkg) {
 function fmtNum(v) { return parseInt(String(v || '0').replace(/[^0-9]/g, ''), 10) || 0; }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+// Multi-select: trainees can pick more than one package (e.g. group classes
+// + personal training). Constraints: all selected packages must share the
+// same payment cadence (all one-time OR all recurring). Mixing is blocked
+// at the UI to keep iCount paypage semantics clean (a single HK can only
+// represent one recurring amount). Categories that share a pay-section are
+// considered compatible: group + monthly + sub all map to "monthly pay".
+function pkgCatGroup(cat) {
+  if (cat === 'onetime') return 'onetime';
+  return 'monthly'; // group + monthly + sub all use the monthly payment section
+}
+
+function recomputePkgSelection() {
+  var selected = [...document.querySelectorAll('.pkg-card.selected')];
+  var priceDisplay = document.getElementById('priceDisplay');
+  var note = document.getElementById('recurringNote');
+  // Reset dependent sections; we'll re-show them based on the new aggregate.
+  document.querySelectorAll('.pay-section input[type=radio]').forEach(function(r) { r.checked = false; r.required = false; });
+  document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
+  document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
+  if (!selected.length) {
+    currentPrice = 0;
+    priceDisplay.style.display = 'none';
+    if (note) note.style.display = 'none';
+    document.getElementById('couplePartner').classList.remove('show');
+    document.getElementById('couplePartnerFields').classList.remove('show');
+    document.getElementById('kidsParentSection').classList.remove('show');
+    var pi = document.getElementById('parentNameInput'); if (pi) { pi.required = false; pi.value = ''; }
+    return;
+  }
+  // Aggregate price + meta.
+  var sum = 0, cats = new Set(), isCouple = false, isKids = false, hasGroup = false, hasRecurring = false;
+  selected.forEach(function(c) {
+    sum += parseInt(c.dataset.price, 10) || 0;
+    var cat = c.dataset.cat;
+    cats.add(pkgCatGroup(cat));
+    if (c.dataset.couple === '1') isCouple = true;
+    if (c.dataset.kids === '1') isKids = true;
+    if (cat === 'group') hasGroup = true;
+    if (cat === 'monthly' || cat === 'group' || cat === 'sub') hasRecurring = true;
+  });
+  currentPrice = sum;
+  priceDisplay.style.display = 'block';
+  document.getElementById('priceAmount').textContent = sum.toLocaleString() + ' ₪';
+  document.getElementById('priceLabel').textContent =
+    cats.has('onetime') && !hasRecurring ? 'תשלום חד פעמי' :
+    cats.has('monthly') && !cats.has('onetime') ? 'מחיר חודשי כולל' :
+    'מחיר כולל';
+  if (note) note.style.display = hasRecurring ? 'block' : 'none';
+  // Couple/Kids: any selected package is enough to require the extra section.
+  var couplePartner = document.getElementById('couplePartner');
+  var couplePartnerFields = document.getElementById('couplePartnerFields');
+  if (isCouple) { couplePartner.classList.add('show'); }
+  else {
+    couplePartner.classList.remove('show');
+    couplePartnerFields.classList.remove('show');
+    document.querySelectorAll('input[name="coupleSplit"]').forEach(function(r) { r.checked = false; });
+  }
+  var kidsSec = document.getElementById('kidsParentSection');
+  var parentInput = document.getElementById('parentNameInput');
+  if (kidsSec && parentInput) {
+    if (isKids) { kidsSec.classList.add('show'); parentInput.required = true; }
+    else { kidsSec.classList.remove('show'); parentInput.required = false; parentInput.value = ''; }
+  }
+  // Pay section: based on the aggregate cadence.
+  if (cats.size === 1 && cats.has('onetime')) {
+    document.getElementById('payOnetime').classList.add('show');
+    document.querySelector('#payOnetime input[type=radio]').required = true;
+  } else if (cats.size === 1 && cats.has('monthly')) {
+    // We use the monthly pay section; allow Bit only when at least one group package is selected.
+    document.getElementById('payMonthly').classList.add('show');
+    document.querySelector('#payMonthly input[type=radio]').required = true;
+    document.getElementById('bitOption').style.display = hasGroup ? 'flex' : 'none';
+  }
+  // cats.size > 1 means mixed one-time + recurring; validateForm shows an inline error.
+}
+
 function attachPkgHandlers() {
-  var firstPkgInput = document.querySelector('#pkgGrid input[type=radio]');
-  if (firstPkgInput) firstPkgInput.required = true;
   document.querySelectorAll('.pkg-card').forEach(function(c) {
-    c.addEventListener('click', function() {
-      document.querySelectorAll('.pkg-card').forEach(function(x) { x.classList.remove('selected', 'error'); });
-      c.classList.add('selected');
-      var price = parseInt(c.dataset.price, 10);
-      currentPrice = price;
-      document.getElementById('priceDisplay').style.display = 'block';
-      document.getElementById('priceAmount').textContent = price.toLocaleString() + ' ₪';
-      var cat = c.dataset.cat;
-      var periodLabel = { onetime: 'תשלום חד פעמי', monthly: 'מחיר חודשי', group: 'מחיר חודשי', sub: 'מחיר חודשי (הוראת קבע)' };
-      document.getElementById('priceLabel').textContent = periodLabel[cat] || 'מחיר';
-      // Show "מנוי מתחדש" disclosure when a recurring package is selected.
-      var note = document.getElementById('recurringNote');
-      if (note) note.style.display = (cat === 'monthly' || cat === 'sub') ? 'block' : 'none';
-      document.querySelectorAll('.pay-section input[type=radio]').forEach(function(r) { r.checked = false; r.required = false; });
-      document.querySelectorAll('.pay-section').forEach(function(s) { s.classList.remove('show'); });
-      document.querySelectorAll('.pay-app-box').forEach(function(b) { b.classList.remove('show'); });
-      var isCouple = c.dataset.couple === '1';
-      var couplePartner = document.getElementById('couplePartner');
-      var couplePartnerFields = document.getElementById('couplePartnerFields');
-      if (isCouple) {
-        couplePartner.classList.add('show');
-      } else {
-        couplePartner.classList.remove('show');
-        couplePartnerFields.classList.remove('show');
-        document.querySelectorAll('input[name="coupleSplit"]').forEach(function(r) { r.checked = false; });
+    c.addEventListener('click', function(ev) {
+      if (ev.target && ev.target.tagName === 'INPUT') return; // let the native checkbox handle itself
+      var cb = c.querySelector('input[type=checkbox]');
+      if (cb) cb.checked = !cb.checked;
+      c.classList.toggle('selected', cb && cb.checked);
+      c.classList.remove('error');
+      // If switching from same-cat to mixed, surface the error visually so the
+      // trainee notices before submit.
+      var selected = [...document.querySelectorAll('.pkg-card.selected')];
+      var cats = new Set(selected.map(function(s) { return pkgCatGroup(s.dataset.cat); }));
+      if (cats.size > 1) {
+        c.classList.add('error');
+        toastMsg('לא ניתן לשלב חבילה חד-פעמית עם מנוי חודשי. בחר/י קטגוריה אחת.', 'error');
+        c.classList.remove('selected');
+        if (cb) cb.checked = false;
       }
-      // Kids/teens group: parent name becomes a required field.
-      var isKids = c.dataset.kids === '1';
-      var kidsSec = document.getElementById('kidsParentSection');
-      var parentInput = document.getElementById('parentNameInput');
-      if (kidsSec && parentInput) {
-        if (isKids) {
-          kidsSec.classList.add('show');
-          parentInput.required = true;
-        } else {
-          kidsSec.classList.remove('show');
-          parentInput.required = false;
-          parentInput.value = '';
-        }
-      }
-      if (cat === 'onetime') {
-        document.getElementById('payOnetime').classList.add('show');
-        document.querySelector('#payOnetime input[type=radio]').required = true;
-      } else if (cat === 'group' || cat === 'monthly') {
-        document.getElementById('payMonthly').classList.add('show');
-        document.querySelector('#payMonthly input[type=radio]').required = true;
-        document.getElementById('bitOption').style.display = (cat === 'group') ? 'flex' : 'none';
-      } else if (cat === 'sub') {
-        document.getElementById('paySub').classList.add('show');
-        document.querySelector('#paySub input[type=radio]').required = true;
-      }
+      recomputePkgSelection();
     });
   });
+}
+
+function toastMsg(text, kind) {
+  var t = document.getElementById('toast'); if (!t) return;
+  t.textContent = text;
+  t.className = 'toast ' + (kind || 'success') + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 3500);
 }
 
 function renderPackages(packages) {
@@ -317,7 +364,7 @@ function renderPackages(packages) {
     // Kids/teens group needs parent contact captured at signup.
     var isKids = /בנות\s*\/\s*בנים|ילד|נוער|teens|kids/i.test(pkg.name) ? '1' : '';
     return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '" data-couple="' + isCouple + '" data-kids="' + isKids + '">'
-      + '<input type="radio" name="entry.729039732" value="' + formVal + '">'
+      + '<input type="checkbox" name="entry.729039732" value="' + formVal + '">'
       + '<div class="pkg-check"></div>'
       + '<div class="pkg-name">' + esc(pkg.name) + '</div>'
       + priceHtml + '</label>';
@@ -386,6 +433,24 @@ function validateForm(form) {
   var firstError = null;
   var firstErrorMsg = null;
   var seenRadioGroups = {};
+
+  // Multi-select packages: at least one must be selected; categories must not be mixed.
+  var pkgGrid = document.getElementById('pkgGrid');
+  if (pkgGrid) {
+    var selected = [...pkgGrid.querySelectorAll('.pkg-card.selected')];
+    if (selected.length === 0) {
+      pkgGrid.closest('.section').classList.add('error');
+      firstError = firstError || pkgGrid.closest('.section');
+      firstErrorMsg = firstErrorMsg || 'יש לבחור לפחות חבילה אחת';
+    } else {
+      var cats = new Set(selected.map(function(c){ return pkgCatGroup(c.dataset.cat); }));
+      if (cats.size > 1) {
+        pkgGrid.closest('.section').classList.add('error');
+        firstError = firstError || pkgGrid.closest('.section');
+        firstErrorMsg = firstErrorMsg || 'לא ניתן לשלב חבילה חד-פעמית עם מנוי חודשי';
+      }
+    }
+  }
 
   form.querySelectorAll('[required]').forEach(function(el) {
     if (el.offsetParent === null && el.type !== 'radio') return;
@@ -503,8 +568,8 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
 
   // Couple split: when "אימון זוגי" + split chosen, hit our backend to create 2 paypages
   var coupleSplitEl = this.querySelector('input[name="coupleSplit"]:checked');
-  var selectedPkgCard = document.querySelector('.pkg-card.selected');
-  var isCouple = selectedPkgCard && selectedPkgCard.dataset.couple === '1';
+  var selectedPkgCards = [...document.querySelectorAll('.pkg-card.selected')];
+  var isCouple = selectedPkgCards.some(function(c){ return c.dataset.couple === '1'; });
   if (isCouple && coupleSplitEl && coupleSplitEl.value === 'split') {
     var partnerName = (this.querySelector('input[name="couplePartnerName"]') || {}).value || '';
     var partnerPhone = (this.querySelector('input[name="couplePartnerPhone"]') || {}).value || '';
@@ -547,8 +612,10 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   var traineePhone = (this.querySelector('input[name="entry.548335095"]') || {}).value || '';
   var traineeEmail = (this.querySelector('input[name="entry.1422787791"]') || {}).value || '';
   var traineeId = (this.querySelector('input[name="entry.842454738"]') || {}).value || '';
-  var pkgCard = document.querySelector('.pkg-card.selected');
-  var pkgName = pkgCard ? (pkgCard.querySelector('.pkg-name')||{}).textContent || '' : '';
+  // Multi-select packages: send a "+"-joined name and the summed amount.
+  var pkgCards = [...document.querySelectorAll('.pkg-card.selected')];
+  var pkgName = pkgCards.map(function(c){ return (c.querySelector('.pkg-name')||{}).textContent || ''; })
+                       .filter(Boolean).join(' + ');
 
   // Always call our backend so the trainee lands in Sapir's dashboard
   // (the upsertTrainee step). For CC/Bit the backend also returns a
