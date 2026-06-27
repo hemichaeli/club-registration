@@ -67,7 +67,7 @@
 <!-- 4: בחירת חבילה -->
 <div class="section" data-sec="4">
   <div class="section-header"><div class="section-icon purple">&#x1F4E6;</div><h2>בחירת חבילה</h2></div>
-  <p class="sub">בחר/י חבילה אחת או יותר (לדוגמה: אימון אישי + קבוצה). אין לשלב חבילה חד-פעמית עם מנוי חודשי.</p>
+  <p class="sub">בחר/י חבילה אחת או יותר. אפשר לשלב חבילות מקטגוריות שונות (לדוגמה: אימון אישי + קבוצה). אופן התשלום ייקבע בשלב הבא.</p>
   <div class="pkg-grid" id="pkgGrid">
     <div class="pkg-loading">טוען חבילות...</div>
   </div>
@@ -272,23 +272,31 @@ function recomputePkgSelection() {
     return;
   }
   // Aggregate price + meta.
-  var sum = 0, cats = new Set(), isCouple = false, isKids = false, hasGroup = false, hasRecurring = false;
+  var sum = 0, oneTimeSum = 0, recurringSum = 0, cats = new Set(),
+      isCouple = false, isKids = false, hasGroup = false, hasRecurring = false, hasOneTime = false;
   selected.forEach(function(c) {
-    sum += parseInt(c.dataset.price, 10) || 0;
+    var p = parseInt(c.dataset.price, 10) || 0;
+    sum += p;
     var cat = c.dataset.cat;
     cats.add(pkgCatGroup(cat));
     if (c.dataset.couple === '1') isCouple = true;
     if (c.dataset.kids === '1') isKids = true;
     if (cat === 'group') hasGroup = true;
-    if (cat === 'monthly' || cat === 'group' || cat === 'sub') hasRecurring = true;
+    if (cat === 'monthly' || cat === 'group' || cat === 'sub') { hasRecurring = true; recurringSum += p; }
+    if (cat === 'onetime') { hasOneTime = true; oneTimeSum += p; }
   });
   currentPrice = sum;
   priceDisplay.style.display = 'block';
   document.getElementById('priceAmount').textContent = sum.toLocaleString() + ' ₪';
-  document.getElementById('priceLabel').textContent =
-    cats.has('onetime') && !hasRecurring ? 'תשלום חד פעמי' :
-    cats.has('monthly') && !cats.has('onetime') ? 'מחיר חודשי כולל' :
-    'מחיר כולל';
+  // Show breakdown for mixed; single-cat shows a simple label.
+  var labelEl = document.getElementById('priceLabel');
+  if (hasOneTime && hasRecurring) {
+    labelEl.innerHTML = 'סה"כ סכום כולל<br><span style="font-size:11px">חד-פעמי: ₪' + oneTimeSum.toLocaleString() +
+                       ' | חודשי: ₪' + recurringSum.toLocaleString() + '</span>';
+  } else {
+    labelEl.textContent = hasOneTime && !hasRecurring ? 'תשלום חד פעמי' :
+                         hasRecurring && !hasOneTime ? 'מחיר חודשי כולל' : 'מחיר כולל';
+  }
   if (note) note.style.display = hasRecurring ? 'block' : 'none';
   // Couple/Kids: any selected package is enough to require the extra section.
   var couplePartner = document.getElementById('couplePartner');
@@ -306,16 +314,23 @@ function recomputePkgSelection() {
     else { kidsSec.classList.remove('show'); parentInput.required = false; parentInput.value = ''; }
   }
   // Pay section: based on the aggregate cadence.
-  if (cats.size === 1 && cats.has('onetime')) {
+  if (hasOneTime && !hasRecurring) {
     document.getElementById('payOnetime').classList.add('show');
     document.querySelector('#payOnetime input[type=radio]').required = true;
-  } else if (cats.size === 1 && cats.has('monthly')) {
-    // We use the monthly pay section; allow Bit only when at least one group package is selected.
+  } else if (hasRecurring && !hasOneTime) {
+    // Pure recurring: monthly section. Bit allowed only when a group package is selected.
+    document.getElementById('payMonthly').classList.add('show');
+    document.querySelector('#payMonthly input[type=radio]').required = true;
+    document.getElementById('bitOption').style.display = hasGroup ? 'flex' : 'none';
+  } else if (hasOneTime && hasRecurring) {
+    // Mixed selection: show the monthly pay section. The trainee picks "הוראת קבע
+    // בכרטיס אשראי" => everything (incl. one-time portion) is charged monthly;
+    // or "חיוב חד פעמי" => everything is charged once and HK is not set up.
+    // The decision is documented inline so they can choose deliberately.
     document.getElementById('payMonthly').classList.add('show');
     document.querySelector('#payMonthly input[type=radio]').required = true;
     document.getElementById('bitOption').style.display = hasGroup ? 'flex' : 'none';
   }
-  // cats.size > 1 means mixed one-time + recurring; validateForm shows an inline error.
 }
 
 function attachPkgHandlers() {
@@ -326,16 +341,6 @@ function attachPkgHandlers() {
       if (cb) cb.checked = !cb.checked;
       c.classList.toggle('selected', cb && cb.checked);
       c.classList.remove('error');
-      // If switching from same-cat to mixed, surface the error visually so the
-      // trainee notices before submit.
-      var selected = [...document.querySelectorAll('.pkg-card.selected')];
-      var cats = new Set(selected.map(function(s) { return pkgCatGroup(s.dataset.cat); }));
-      if (cats.size > 1) {
-        c.classList.add('error');
-        toastMsg('לא ניתן לשלב חבילה חד-פעמית עם מנוי חודשי. בחר/י קטגוריה אחת.', 'error');
-        c.classList.remove('selected');
-        if (cb) cb.checked = false;
-      }
       recomputePkgSelection();
     });
   });
@@ -434,7 +439,7 @@ function validateForm(form) {
   var firstErrorMsg = null;
   var seenRadioGroups = {};
 
-  // Multi-select packages: at least one must be selected; categories must not be mixed.
+  // Multi-select packages: at least one must be selected (any combination allowed).
   var pkgGrid = document.getElementById('pkgGrid');
   if (pkgGrid) {
     var selected = [...pkgGrid.querySelectorAll('.pkg-card.selected')];
@@ -442,13 +447,6 @@ function validateForm(form) {
       pkgGrid.closest('.section').classList.add('error');
       firstError = firstError || pkgGrid.closest('.section');
       firstErrorMsg = firstErrorMsg || 'יש לבחור לפחות חבילה אחת';
-    } else {
-      var cats = new Set(selected.map(function(c){ return pkgCatGroup(c.dataset.cat); }));
-      if (cats.size > 1) {
-        pkgGrid.closest('.section').classList.add('error');
-        firstError = firstError || pkgGrid.closest('.section');
-        firstErrorMsg = firstErrorMsg || 'לא ניתן לשלב חבילה חד-פעמית עם מנוי חודשי';
-      }
     }
   }
 
