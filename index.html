@@ -638,6 +638,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
           idNumber: traineeId, birthDate: dobHe,
           packageName: pkgName, amount: currentPrice || 0,
           recurring: isRecurringCC, paymentMethod: payMethod,
+          forceNewTrainee: !!(document.getElementById('forceNewFlag')),
           parentName: (document.getElementById('parentNameInput') || {}).value || '',
           medicalCondition: (function(){ var v=pick('entry.30320603'); return v==='לא'?'':((document.getElementById('medicalConditionDetailText')||{}).value||v); })(),
           injuries: pick('entry.297649418')==='כן'?'כן':'',
@@ -718,7 +719,7 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   var skipBtn = document.getElementById('returnSkipBtn');
   var dismissBtn = document.getElementById('returnDismissBtn');
   if (!phoneEl || !banner) return;
-  var dismissed = false, lastQuery = '', matched = null;
+  var dismissed = false, lastQuery = '', matched = null, matches = [];
 
   function digits(s){ return String(s||'').replace(/\D/g,''); }
 
@@ -726,17 +727,78 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
     if (dismissed) return;
     var phone = digits(phoneEl.value);
     var id = idEl ? digits(idEl.value) : '';
-    if (phone.length < 9 && id.length < 5) return;        // not enough to match
+    if (phone.length < 9 && id.length < 5) return;
     var q = phone + '|' + id;
-    if (q === lastQuery) return;                           // avoid repeats
+    if (q === lastQuery) return;
     lastQuery = q;
     var url = LOOKUP + '?phone=' + encodeURIComponent(phone) + '&idNumber=' + encodeURIComponent(id);
     fetch(url).then(function(r){return r.json()}).then(function(d){
-      if (d && d.found && d.trainee) {
-        matched = d.trainee;
-        nameSpan.textContent = 'ברוכה השבה' + (matched.firstName ? ', ' + matched.firstName : '') + '!';
+      if (!d || !d.found) return;
+      matches = d.trainees || (d.trainee ? [d.trainee] : []);
+      matched = matches[0] || null;
+      if (!matched) return;
+      // Phone matched but caller hasn't entered ת.ז yet OR existing record
+      // has no ת.ז on file (legacy row). Force ID entry before deciding the
+      // create-new vs update path — the dedupe key needs ת.ז to work.
+      var legacyNoId = (d.legacyNoIdCount || 0) > 0;
+      var idMissing = !id;
+      if (idMissing || legacyNoId) {
+        nameSpan.textContent = 'מצאנו רישום על מספר זה. יש להזין ת.ז כדי להמשיך.';
         banner.style.display = 'block';
+        if (skipBtn) skipBtn.style.display = 'none';
+        // make ת.ז required + visually highlight
+        if (idEl) {
+          idEl.setAttribute('required','required');
+          idEl.style.borderColor = '#dc2626';
+          idEl.focus();
+          var lab = idEl.closest('.field') && idEl.closest('.field').querySelector('.flabel');
+          if (lab && lab.querySelector('.req')==null) lab.insertAdjacentHTML('afterbegin','<span class="req">*</span> ');
+          if (lab && lab.textContent.indexOf('אופציונלי')<0 && idEl.placeholder) {
+            idEl.placeholder = 'מספר ת.ז (חובה — נמצא רישום קיים)';
+          }
+        }
+        return;
       }
+      // Caller provided ID + existing record has an ID. d.sameIdCount tells us
+      // how many existing trainees share this exact phone+ID — those are
+      // family members (parent + child, etc).
+      var sameIdCount = d.sameIdCount || 0;
+      var names = matches.map(function(t){return (t.firstName + ' ' + t.lastName).trim()}).filter(Boolean).join(', ');
+      if (sameIdCount >= 1) {
+        banner.innerHTML = '<div style="text-align:right">'+
+          '<div style="font-weight:700;color:#111;margin-bottom:6px">מצאנו רישום על אותו טלפון+ת.ז: '+(names||'לא ידוע')+'</div>'+
+          '<div style="font-size:13px;color:#555;margin-bottom:12px">אם זו את/ה — לחצו "עדכון פרטים". אם רוצים לרשום בן/בת משפחה נוסף (למשל ילד/ה) על אותו טלפון, לחצו "מתאמן/ת חדש/ה".</div>'+
+          '<button type="button" id="updateExistingBtn" style="background:#2563eb;color:#fff;border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;margin-left:8px">עדכון פרטים</button>'+
+          '<button type="button" id="createNewBtn" style="background:#22c55e;color:#fff;border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;margin-left:8px">מתאמן/ת חדש/ה</button>'+
+          '<button type="button" id="dismissNewBtn" style="background:transparent;color:#666;border:0;padding:10px 8px;cursor:pointer">×</button>'+
+          '</div>';
+        banner.style.display = 'block';
+        document.getElementById('updateExistingBtn').onclick = function(){
+          // Redirect to /renew so they can update/renew via the multi-select flow
+          window.location.href = 'https://sapir-crm-system-production.up.railway.app/renew?phone='+encodeURIComponent(phone);
+        };
+        document.getElementById('createNewBtn').onclick = function(){
+          banner.style.display = 'none';
+          // Tag the form so the backend knows this is a NEW trainee on an
+          // existing phone+ID and should append rather than update.
+          if (!document.getElementById('forceNewFlag')) {
+            var hid = document.createElement('input');
+            hid.type='hidden'; hid.name='forceNewTrainee'; hid.value='1'; hid.id='forceNewFlag';
+            (document.querySelector('form')||document.body).appendChild(hid);
+          }
+          // Clear name field so they enter the new trainee's name (not the parent's)
+          if (nameEl) { nameEl.value=''; nameEl.focus(); nameEl.placeholder='שם המתאמנ/ת החדש/ה'; }
+        };
+        document.getElementById('dismissNewBtn').onclick = function(){
+          dismissed = true; banner.style.display = 'none';
+        };
+        return;
+      }
+      // Phone matches but caller's ID is different from any existing — this
+      // is a different person using a recycled/shared phone. Allow them to
+      // proceed as new but warn so they double-check.
+      nameSpan.textContent = 'הטלפון רשום על שם אחר. אם זה לא את/ה — המשך בהרשמה רגילה.';
+      banner.style.display = 'block';
     }).catch(function(){});
   }
 
@@ -744,7 +806,6 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
   if (idEl) idEl.addEventListener('blur', doLookup);
 
   skipBtn && skipBtn.addEventListener('click', function(){
-    // Prefill name/email from the match if the fields are empty, then jump to packages.
     if (matched) {
       if (nameEl && !nameEl.value && matched.name) nameEl.value = matched.name;
       if (emailEl && !emailEl.value && matched.email) emailEl.value = matched.email;
