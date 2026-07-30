@@ -633,10 +633,21 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
         var dobIso = (document.getElementById('dobInput') || {}).value || '';
         var dobHe  = dobIso ? dobIso.split('-').reverse().join('/') : '';
         var waiver = (f.querySelector('input[name="entry.4242155"]:checked')||{}).value || (f.querySelector('input[name="entry.4242155"]')?'אישר/ה':'');
+        // Sapir CRM adds ?firstMonth=X to the registration URL from the
+        // "Send registration form" modal. X is the amount to charge for the
+        // current partial month (0 = only verify the card, no charge; the
+        // first real charge happens on the 1st of next month via the cron).
+        // When absent, back-end falls back to the package price.
+        var firstMonthParam = (function(){
+          try { return new URLSearchParams(location.search).get('firstMonth'); }
+          catch(e){ return null; }
+        })();
         return JSON.stringify({
           name: traineeName, phone: traineePhone, email: traineeEmail,
           idNumber: traineeId, birthDate: dobHe,
           packageName: pkgName, amount: currentPrice || 0,
+          firstMonthAmount: firstMonthParam != null && firstMonthParam !== ''
+            ? Number(firstMonthParam) : undefined,
           recurring: isRecurringCC, paymentMethod: payMethod,
           forceNewTrainee: !!(document.getElementById('forceNewFlag')),
           parentName: (document.getElementById('parentNameInput') || {}).value || '',
