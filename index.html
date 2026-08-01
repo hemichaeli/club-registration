@@ -719,6 +719,23 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
 /* Returning-customer recognition: when a valid phone (or ת"ז) is entered, ask
    the backend if this person already exists. If so, show a banner letting them
    skip the questionnaire and go straight to package + payment. */
+// Prefill phone + ID from URL when the trainee arrived via the unified
+// verify-card "not found → register" branch. verify-card.html builds
+// /?phone=X&id=Y so the trainee doesn't have to retype what she just typed
+// on the previous screen. Non-destructive: only writes if the fields are
+// empty and the params are present.
+(function(){
+  try {
+    var sp = new URLSearchParams(location.search);
+    var p = String(sp.get('phone') || '').replace(/\D/g,'');
+    var i = String(sp.get('id') || sp.get('idNumber') || '').replace(/\D/g,'');
+    var phoneEl = document.querySelector('input[name="entry.548335095"]');
+    var idEl = document.querySelector('input[name="entry.842454738"]');
+    if (p && phoneEl && !phoneEl.value) phoneEl.value = p;
+    if (i && idEl && !idEl.value) idEl.value = i;
+  } catch(e) {}
+})();
+
 (function(){
   var LOOKUP = 'https://sapir-crm-system-production.up.railway.app/api/public/lookup';
   var phoneEl = document.querySelector('input[name="entry.548335095"]');
