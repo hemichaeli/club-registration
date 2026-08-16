@@ -129,7 +129,7 @@
 <div class="field"><div class="radio-group" id="radioOnetime">
 <label class="radio-option"><input type="radio" name="entry.324474069" value="כרטיס אשראי, תשלום חד פעמי" data-app="none"><span class="dot"></span> כרטיס אשראי - חד פעמי</label>
 <!-- PayBox option hidden 2026-06-01: deeplink (Firebase Dynamic Links) shut down; no clean way to pay --><!--<label class="radio-option"><input type="radio" name="entry.324474069" value="פייבוקס - PayBox" data-app="paybox"><span class="dot"></span> PayBox</label>-->
-<label class="radio-option"><input type="radio" name="entry.324474069" value="ביט - Bit" data-app="bit"><span class="dot"></span> Bit - ביט</label>
+<label class="radio-option" id="bitOptionOnetime"><input type="radio" name="entry.324474069" value="ביט - Bit" data-app="bit"><span class="dot"></span> Bit - ביט</label>
 <label class="radio-option"><input type="radio" name="entry.324474069" value="מזומן" data-app="none"><span class="dot"></span> מזומן</label>
 </div></div>
 <div class="pay-app-box" id="appBoxOnetime">
@@ -398,7 +398,24 @@ function recomputePkgSelection() {
     // Pure recurring: monthly section. Bit allowed only when a group package is selected.
     document.getElementById('payMonthly').classList.add('show');
     document.querySelector('#payMonthly input[type=radio]').required = true;
-    document.getElementById('bitOption').style.display = 'flex'; // Bit allowed for all recurring per founder 2026-08-14
+    // Bit ONLY for the 3 whitelisted packages (founder 2026-08-16):
+    //   שעור ניסיון בקבוצה / אימון אישי 1:1 / אימון זוגי
+    // For any other selected package, hide the Bit option in BOTH the
+    // one-time and monthly payment sections. Also uncheck if it was selected.
+    var bitAllowed = selected.some(function(c) {
+      var nm = (c.querySelector('.pkg-name') || {}).textContent || '';
+      nm = nm.trim();
+      return nm === 'שעור ניסיון בקבוצה' || nm === 'אימון אישי 1:1' || nm === 'אימון זוגי';
+    });
+    var bitDisp = bitAllowed ? 'flex' : 'none';
+    var bitMonthly = document.getElementById('bitOption');
+    var bitOnetime = document.getElementById('bitOptionOnetime');
+    if (bitMonthly) bitMonthly.style.display = bitDisp;
+    if (bitOnetime) bitOnetime.style.display = bitDisp;
+    if (!bitAllowed) {
+      // Uncheck any Bit radio if it was previously selected + is now hidden.
+      document.querySelectorAll('input[type=radio][value="ביט - Bit"]').forEach(function(r){r.checked=false});
+    }
   } else if (hasOneTime && hasRecurring) {
     // Mixed selection: show the monthly pay section. The trainee picks "הוראת קבע
     // בכרטיס אשראי" => everything (incl. one-time portion) is charged monthly;
@@ -406,7 +423,24 @@ function recomputePkgSelection() {
     // The decision is documented inline so they can choose deliberately.
     document.getElementById('payMonthly').classList.add('show');
     document.querySelector('#payMonthly input[type=radio]').required = true;
-    document.getElementById('bitOption').style.display = 'flex'; // Bit allowed for all recurring per founder 2026-08-14
+    // Bit ONLY for the 3 whitelisted packages (founder 2026-08-16):
+    //   שעור ניסיון בקבוצה / אימון אישי 1:1 / אימון זוגי
+    // For any other selected package, hide the Bit option in BOTH the
+    // one-time and monthly payment sections. Also uncheck if it was selected.
+    var bitAllowed = selected.some(function(c) {
+      var nm = (c.querySelector('.pkg-name') || {}).textContent || '';
+      nm = nm.trim();
+      return nm === 'שעור ניסיון בקבוצה' || nm === 'אימון אישי 1:1' || nm === 'אימון זוגי';
+    });
+    var bitDisp = bitAllowed ? 'flex' : 'none';
+    var bitMonthly = document.getElementById('bitOption');
+    var bitOnetime = document.getElementById('bitOptionOnetime');
+    if (bitMonthly) bitMonthly.style.display = bitDisp;
+    if (bitOnetime) bitOnetime.style.display = bitDisp;
+    if (!bitAllowed) {
+      // Uncheck any Bit radio if it was previously selected + is now hidden.
+      document.querySelectorAll('input[type=radio][value="ביט - Bit"]').forEach(function(r){r.checked=false});
+    }
   }
 }
 
@@ -539,7 +573,14 @@ function wireTrainDayPickers() {
 }
 
 function loadPackages() {
-  fetch(PKG_API)
+  // When Sapir sends the link with ?package=X, include hidden packages
+  // matching that name so the trainee sees the (otherwise-hidden) package
+  // she picked for them. Trainees arriving organically (no ?package=) get
+  // only the public list — hidden packages are stripped server-side.
+  var forcedForFetch = '';
+  try { forcedForFetch = new URLSearchParams(location.search).get('package') || ''; } catch(e) {}
+  var url = PKG_API + (forcedForFetch ? ('?include=' + encodeURIComponent(forcedForFetch)) : '');
+  fetch(url)
     .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function(data) { renderPackages(data.packages || []); })
     .catch(function(err) {
