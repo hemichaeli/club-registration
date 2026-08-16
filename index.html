@@ -326,11 +326,14 @@ function recomputePkgSelection() {
       isCouple = false, isKids = false, hasGroup = false, hasRecurring = false, hasOneTime = false;
   selected.forEach(function(c) {
     var p;
+    // Prefer the card's own data-perprice (from pkg.pricePerSession) when set;
+    // otherwise fall back to perDayBase (legacy "אימון אישי 1:1" base).
+    var perPrice = parseInt(c.dataset.perprice, 10) || perDayBase;
     if (c.dataset.perday === 'once') {
-      p = perDayBase * countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth());
+      p = perPrice * countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth());
     } else if (c.dataset.perday === 'twice') {
-      p = perDayBase * (countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth())
-                     + countWeekdayInMonth(day2 === '' ? null : Number(day2), now.getFullYear(), now.getMonth()));
+      p = perPrice * (countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth())
+                    + countWeekdayInMonth(day2 === '' ? null : Number(day2), now.getFullYear(), now.getMonth()));
     } else {
       p = parseInt(c.dataset.price, 10) || 0;
     }
@@ -441,14 +444,21 @@ function renderPackages(packages) {
     var saleP = pkg.salePrice ? fmtNum(pkg.salePrice) : 0;
     var displayP = saleP || origP;
     var formVal = esc(pkg.name + ', ' + origP.toLocaleString() + ' ש"ח');
+    // Per-session pricing:
+    //  - New (2026-08-14): if package.pricePerSession from the API is > 0, use it
+    //    and treat as once-weekly by default; twice if the name signals it.
+    //  - Legacy (before pricePerSession existed): fall back to name-based חד-שבועי /
+    //    דו-שבועי detection with the "אימון אישי 1:1" base price.
+    var pricePerSession = parseInt(String(pkg.pricePerSession||'0').replace(/[^0-9]/g,''),10)||0;
     var isOnceWeekly = /חד-שבועי/.test(pkg.name || '');
     var isTwiceWeekly = /דו-שבועי/.test(pkg.name || '');
-    var perday = isOnceWeekly ? 'once' : isTwiceWeekly ? 'twice' : '';
+    var perday = pricePerSession > 0
+      ? (isTwiceWeekly ? 'twice' : 'once')
+      : (isOnceWeekly ? 'once' : isTwiceWeekly ? 'twice' : '');
     var priceHtml;
     if (perday) {
-      // Show "לפי מספר האימונים בחודש" instead of a fixed price — real amount
-      // computes after the trainee picks their day(s).
-      priceHtml = '<div class="pkg-price" style="font-size:15px">₪' + (window.BASE_SESSION_PRICE||300) + ' × מספר האימונים בחודש</div>';
+      var basePriceForDisplay = pricePerSession || window.BASE_SESSION_PRICE || 300;
+      priceHtml = '<div class="pkg-price" style="font-size:15px">₪' + basePriceForDisplay + ' × מספר האימונים בחודש</div>';
     } else if (saleP) {
       priceHtml = '<s style="font-size:12px;color:var(--muted)">' + origP.toLocaleString() + ' ₪</s><div class="pkg-price">' + saleP.toLocaleString() + ' ₪</div>';
     } else {
@@ -457,7 +467,7 @@ function renderPackages(packages) {
     var isCouple = /אימון זוגי/.test(pkg.name) ? '1' : '';
     // Kids/teens group needs parent contact captured at signup.
     var isKids = /בנות\s*\/\s*בנים|ילד|נוער|teens|kids/i.test(pkg.name) ? '1' : '';
-    return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '" data-couple="' + isCouple + '" data-kids="' + isKids + '" data-perday="' + perday + '">'
+    return '<label class="pkg-card" data-price="' + displayP + '" data-cat="' + cat + '" data-couple="' + isCouple + '" data-kids="' + isKids + '" data-perday="' + perday + '" data-perprice="' + pricePerSession + '">'
       + '<input type="checkbox" name="entry.729039732" value="' + formVal + '">'
       + '<div class="pkg-check"></div>'
       + '<div class="pkg-name">' + esc(pkg.name) + '</div>'
