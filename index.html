@@ -512,6 +512,22 @@ function renderPackages(packages) {
         console.warn('[join] package "' + forcedPkg + '" not found, showing full grid');
       }
     }
+    // Pre-selected training days (2026-08-16): Sapir picked the day(s) in the
+    // dashboard shareRegModal. Set the trainDay1/trainDay2 selects so the
+    // per-session price calc runs immediately with those days baked in. The
+    // trainee can still change them if needed.
+    var params = new URLSearchParams(location.search);
+    var forcedDay1 = params.get('day1');
+    var forcedDay2 = params.get('day2');
+    if (forcedDay1 !== null && forcedDay1 !== '') {
+      var d1el = document.getElementById('trainDay1');
+      if (d1el) d1el.value = String(parseInt(forcedDay1, 10));
+    }
+    if (forcedDay2 !== null && forcedDay2 !== '') {
+      var d2el = document.getElementById('trainDay2');
+      if (d2el) d2el.value = String(parseInt(forcedDay2, 10));
+    }
+    if (forcedDay1 !== null || forcedDay2 !== null) recomputePkgSelection();
   } catch(e) { console.warn('[join] pre-select failed', e); }
 }
 
