@@ -541,6 +541,31 @@ function loadPackages() {
 }
 loadPackages();
 
+function showBitInstructions(amount, sapirPhone) {
+  var amt = (amount || 0).toLocaleString('he-IL');
+  var phone = sapirPhone || '054-315-5130';
+  var overlay = document.getElementById('confirmOverlay');
+  var card = overlay.querySelector('.confirm-card');
+  // Replace overlay contents with Bit-specific instructions. Keeps the same
+  // dark-themed card styling; user closes with X.
+  card.innerHTML =
+    '<div class="ico" style="font-size:56px">💜</div>' +
+    '<h2 style="color:#22c55e;margin-bottom:6px">קיבלנו את הפרטים שלך</h2>' +
+    '<div style="color:#b8b8c0;font-size:14px;margin-bottom:22px">להשלמת התשלום בביט:</div>' +
+    '<div style="background:rgba(46,204,113,.06);border:1px solid rgba(46,204,113,.25);border-radius:12px;padding:18px 20px;text-align:right;line-height:1.9;margin-bottom:20px;font-size:15px;color:#e8e6e3">' +
+      '<div><b>1.</b> פתח/י את אפליקציית <b>ביט</b></div>' +
+      '<div><b>2.</b> שלח/י <b style="color:#d4a853">₪' + amt + '</b></div>' +
+      '<div><b>3.</b> למספר <b style="direction:ltr;display:inline-block">' + phone + '</b> (ספיר)</div>' +
+    '</div>' +
+    '<a href="bit://" style="display:inline-flex;align-items:center;gap:8px;background:#8b5cf6;color:#fff;font-family:\'Rubik\',sans-serif;font-size:16px;font-weight:700;padding:14px 32px;border-radius:10px;text-decoration:none;margin-bottom:14px">💜 פתח/י את ביט</a>' +
+    '<div style="color:#8a8a9a;font-size:12px;line-height:1.6;margin-bottom:20px">' +
+      'אם הכפתור לא נפתח, פתח/י את אפליקציית ביט ידנית.<br>' +
+      'שלחנו לך גם הודעת WhatsApp עם הפרטים.<br>' +
+      'אחרי שספיר תראה שהכסף נכנס, היא תשלח חשבונית לאימייל.' +
+    '</div>' +
+    '<button class="btn-close" onclick="document.getElementById(\'confirmOverlay\').classList.remove(\'show\')">סגירה</button>';
+  overlay.classList.add('show');
+}
 function showToast(msg, type) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -809,18 +834,21 @@ document.getElementById('mainForm').addEventListener('submit', function(e) {
         });
       })()
     }).then(function(r){return r.json()}).then(function(d){
-      if (d && d.success && d.payUrl) {
-        window.location.href = d.payUrl; // CC/Bit → straight to iCount paypage
+      if (d && d.success && d.awaitingBit) {
+        // Bit — no auto-charge exists. Show the "open Bit + send to
+        // 054-315-5130" instructions overlay. Sapir confirms receipt via
+        // the dashboard "✓ הכסף התקבל" alert button, which auto-creates
+        // the iCount invoice + writes תשלומים.
+        showBitInstructions(d.amount, d.sapirPhone);
+      } else if (d && d.success && d.payUrl) {
+        window.location.href = d.payUrl; // CC → straight to iCount/PayMe paypage
       } else if (!(d && d.success)) {
-        // Backend registration failed, show non-fatal warning but still
-        // proceed with the confirm overlay so the user knows the form
-        // reached the Google Form fallback.
         console.warn('[create-payment] backend registration not successful', d);
       }
     }).catch(function(err){
       console.warn('[create-payment] backend call failed', err);
     });
-    if (isCC || isBit) return; // CC/Bit waits for redirect; nothing else to do here
+    if (isCC || isBit) return; // CC/Bit waits for redirect / instructions overlay
   }
 
   // Build confirmation message based on payment method, then show a
