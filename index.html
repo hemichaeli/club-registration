@@ -324,11 +324,17 @@ function recomputePkgSelection() {
   // Aggregate price + meta.
   var sum = 0, oneTimeSum = 0, recurringSum = 0, cats = new Set(),
       isCouple = false, isKids = false, hasGroup = false, hasRecurring = false, hasOneTime = false;
+  // Per-trainee price-per-session override from URL param ?pps=X (added by
+  // Sapir in the dashboard 'שלח טופס הרשמה' modal for this specific
+  // trainee). If present + > 0, wins over the package's pricePerSession
+  // and over the base session price. Precedence: pps > pkg.pricePerSession > perDayBase.
+  var ppsOverride = 0;
+  try { ppsOverride = parseFloat(new URLSearchParams(location.search).get('pps') || '') || 0; } catch(e) {}
   selected.forEach(function(c) {
     var p;
-    // Prefer the card's own data-perprice (from pkg.pricePerSession) when set;
-    // otherwise fall back to perDayBase (legacy "אימון אישי 1:1" base).
-    var perPrice = parseInt(c.dataset.perprice, 10) || perDayBase;
+    var perPrice = ppsOverride > 0
+      ? ppsOverride
+      : (parseInt(c.dataset.perprice, 10) || perDayBase);
     if (c.dataset.perday === 'once') {
       p = perPrice * countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth());
     } else if (c.dataset.perday === 'twice') {
@@ -353,9 +359,11 @@ function recomputePkgSelection() {
       var c1 = countWeekdayInMonth(day1 === '' ? null : Number(day1), now.getFullYear(), now.getMonth());
       var c2 = hasTwice ? countWeekdayInMonth(day2 === '' ? null : Number(day2), now.getFullYear(), now.getMonth()) : 0;
       var totalSess = c1 + c2;
+      // Show override price if present (matches the math above).
+      var previewBase = ppsOverride > 0 ? ppsOverride : perDayBase;
       if (totalSess > 0) {
         calc.style.display = 'block';
-        calc.innerHTML = '📊 החודש הנוכחי: <b>' + totalSess + '</b> אימונים × <b>₪' + perDayBase + '</b> = <b>₪' + (totalSess * perDayBase).toLocaleString() + '</b>';
+        calc.innerHTML = '📊 החודש הנוכחי: <b>' + totalSess + '</b> אימונים × <b>₪' + previewBase + '</b> = <b>₪' + (totalSess * previewBase).toLocaleString() + '</b>';
       } else {
         calc.style.display = 'block';
         calc.innerHTML = 'בחר/י יום כדי לראות את המחיר החודשי.';
