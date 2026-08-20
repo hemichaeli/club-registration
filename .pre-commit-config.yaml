@@ -1,0 +1,47 @@
+# Pre-commit master config for all hemichaeli/* repos
+# Install: pip install pre-commit && pre-commit install
+# Run on all files: pre-commit run --all-files
+# Skip in emergency (use sparingly): git commit --no-verify
+
+repos:
+  # Core checks: catch the common foot-guns
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=10240']  # 10 MB - reject anything larger
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-json
+      - id: check-yaml
+        args: ['--allow-multiple-documents']
+      - id: check-toml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Secret scanning — gitleaks
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # Custom local hook: reject 0-byte files with weird names (shell-injection artifacts)
+  - repo: local
+    hooks:
+      - id: reject-shell-artifact-files
+        name: Reject shell-injection stray files (0-byte, weird names)
+        entry: python C:/Projects/docs/templates/check_shell_artifacts.py
+        language: system
+        types: [file]
+        pass_filenames: true
+
+      - id: reject-secret-files-by-path
+        name: Block known secret-file paths
+        entry: python C:/Projects/docs/templates/check_secret_paths.py
+        language: system
+        pass_filenames: true
